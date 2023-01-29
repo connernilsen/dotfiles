@@ -1,0 +1,4 @@
+undo-dir
+*.un~
+bundle
+.netrwhist

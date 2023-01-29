@@ -1,0 +1,136 @@
+set nocompatible " don't use vi compatibility
+filetype plugin indent on " turn on indentation and plugins for recognized file types
+
+" tab settings
+set shiftwidth=4 " number of spaces used in an auto indent step
+set shiftround " << and >> round to shiftwidth
+au FileType * set expandtab tabstop=4
+au FileType make set noexpandtab tabstop=4
+" NOTE: flip tabs/spaces with :retab
+
+" visual settings
+set number " show line numbers
+set cursorline " light highlight for line showing cursor position
+set incsearch " show current typed in stuff
+set showmatch " jump to matching bracket
+set hlsearch " set highlight for last search until :noh
+set scrolloff=5 " number of lines to keep between cursor and top or bottom of buffer
+set sidescrolloff=10 " number of cols to keep between cursor and left or right of buff
+set sidescroll=1 " scroll one character at a time
+set noshowmode " handled by lightline
+set lcs=tab:<->,trail:· " show markings for tabs and trailing spaces
+hi link tab Error " highlight tabs as errors
+
+" behavior settings
+set autoindent " automatically set indent of new line
+set smartindent " clever autoindenting
+set smartcase " ignore case when a capital letter appears
+set ignorecase " mostly ignore case when searching (see smartcase)
+set spell " highlight spelling mistakes
+set laststatus=2 " always show status line
+set visualbell " use visual bell instead of beeping
+" create undo directory
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir " set undo directory
+set undofile " save and restore undo history when editing files
+set completeopt=menu,preview,noinsert " when completing with
+" Ctrl + N in insert mode, don't insert values
+set nojs " don't use two spaces after joining a line ending with .
+syntax enable " enable syntax highlighting
+set splitbelow " split new windows on bottom
+set splitright " split new windows to the right
+set backspace=2 " backspace twice when editing eol/sol
+" set hidden " allow hiding buffers if they aren't saved
+
+set guifont=Monospace\ 12 " font
+
+" set clipboard settings (might need xclip)
+if system('uname -s') == "Darwin\n"
+  set clipboard=unnamed "OSX
+  set clipboard+=unnamedplus
+else
+  set clipboard+=unnamedplus
+  set clipboard=unnamedplus "Linux
+endif
+
+if has('nvim')
+  let &packpath = &runtimepath 
+endif
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle
+Plugin 'VundleVim/Vundle.vim'
+" Plugin list begin
+
+" Plugin 'drewtempelmeyer/palenight.vim' " theme
+Plugin 'dracula/vim',{'name':'dracula'}  " theme
+Plugin 'itchyny/lightline.vim'           " meta info at bottom of screen
+Plugin 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
+Plugin 'nathanaelkane/vim-indent-guides' " show indentation guides
+Plugin 'sheerun/vim-polyglot'            " language helpers
+Plugin 'jiangmiao/auto-pairs'            " helpers for parentheses
+Plugin 'yuttie/comfortable-motion.vim'   " smooth scroll up/down/page/back
+Plugin 'breuckelen/vim-resize'           " easy resize with arrow keys
+Plugin 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
+Plugin 'blueyed/vim-diminactive'         " dim inactive windows
+Plugin 'ervandew/supertab'               " tab completion
+Plugin 'junegunn/vim-peekaboo'           " check registers when ctrl + r
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim'                " fuzzy finder
+Plugin 'dense-analysis/ale'              " async lint engine
+
+" Plugin list end
+call vundle#end()
+
+" Brief help
+" :PluginList - list plugins
+" :PluginInstall - installs plugins
+" :PluginUpdate - update plugin
+" :PluginSearch foo - searches for foo
+" :PluginClean - confirms removal of unused plugins
+" see :h vundle for help
+
+" setup vim-javascript
+let g:typescript_indent_disable=1
+
+" turn on indent guides
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_auto_colors=0
+let g:indent_guides_guide_size=1
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
+
+" use enhanced coloring if possible
+if (has("termguicolors"))
+  set termguicolors
+endif
+
+" set color scheme
+set background=dark
+colorscheme dracula
+
+let g:lightline = {
+  \ 'colorscheme': 'dracula',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'readonly', 'filename', 'modified' ] ],
+	\		'right': [ [ 'lineinfo' ],
+	\							 [ 'percent' ],
+	\							 [ 'filetype' ] ]
+  \ },
+  \ }
+
+" comfortable motion setup
+let g:comfortable_motion_no_default_key_mappings = 1
+let g:comfortable_motion_impulse_multiplier = 1  
+nnoremap <silent> <C-d> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 2)<CR>
+nnoremap <silent> <C-u> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -2)<CR>
+nnoremap <silent> <C-f> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 4)<CR>
+nnoremap <silent> <C-b> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -4)<CR>
+
+" completion engine with ALE
+set omnifunc=ale#completion#OmniFunc
