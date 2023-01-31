@@ -2,3 +2,4 @@ undo-dir
 *.un~
 bundle
 .netrwhist
+session-dir
