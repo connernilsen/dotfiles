@@ -4,8 +4,8 @@ filetype plugin indent on " turn on indentation and plugins for recognized file 
 " tab settings
 set shiftwidth=4 " number of spaces used in an auto indent step
 set shiftround " << and >> round to shiftwidth
-au FileType * set expandtab tabstop=4
-au FileType make set noexpandtab tabstop=4
+au BufNewFile,BufRead TARGETS set filetype=python
+set expandtab tabstop=4
 " NOTE: flip tabs/spaces with :retab
 
 " visual settings
@@ -43,8 +43,6 @@ set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
 " set hidden " allow hiding buffers if they aren't saved
-
-set guifont=Monospace\ 12 " font
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == "Darwin\n"
@@ -101,9 +99,11 @@ let g:typescript_indent_disable=1
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
-let g:indent_guides_guide_size=1
+let g:indent_guides_guide_size=4
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
 
+" format on save
+let g:ale_fix_on_save = 1
 " use enhanced coloring if possible
 if (has("termguicolors"))
   set termguicolors
@@ -134,3 +134,11 @@ nnoremap <silent> <C-b> :call comfortable_motion#flick(g:comfortable_motion_impu
 
 " completion engine with ALE
 set omnifunc=ale#completion#OmniFunc
+
+" ocaml stuff
+
+if system("opam --version")
+    let g:opamshare = substitute(system('opam config var share'),'\n$','','''') . "/merlin/vim"
+    set rtp+=g:opamshare
+    set rtp^="/home/connernilsen/.opam/5.0.0/share/ocp-indent/vim"
+endif
