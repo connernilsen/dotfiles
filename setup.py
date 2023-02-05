@@ -116,6 +116,7 @@ def homebrew_setup() -> StepResult:
             "htop",
             "opam",
             "ripgrep",
+            "tmux",
         ],
         text=True
     )
@@ -131,11 +132,13 @@ def homebrew_setup() -> StepResult:
 def setup_python() -> StepResult:
     step = StepResult("python")
     pip_install = subprocess.run(
-        ["pip3",
-        "install",
-        "autoimport",
-        "pyre",
-        "black"],
+        [
+            "pip3",
+            "install",
+            "autoimport",
+            "pyre-check",
+            "black"
+        ],
         text=True
     )
 
@@ -143,6 +146,20 @@ def setup_python() -> StepResult:
         return step.add_result(False, f"Error pip installing packages: {pip_install.stderr}")
     else:
         return step.add_result(True, "Packages installed")
+
+
+def setup_tmux(home: Path) -> StepResult:
+    step = StepResult("tmux")
+    tmux_config = home / ".tmux.conf"
+
+    if tmux_config.exists():
+        if not tmux_config.is_symlink():
+            return step.add_result(False, f"Tmux conf already exists but is not symlinked: {tmux_config}")
+        else:
+            return step.add_result(True, "Tmux conf already set up and linked")
+    else:
+        tmux_config.symlink_to("tmux.conf")
+        return step.add_result(True, "Tmux conf linked to dotfile dir")
 
 
 def main() -> None:
