@@ -91,7 +91,7 @@ def setup_vim(home: Path, dotfile: Path) -> StepResult:
     return step
 
 
-def homebrew_setup() -> StepResult:
+def setup_homebrew() -> StepResult:
     step = StepResult("homebrew")
     if "homebrew" not in os.getenv("PATH"):
         brew_install = subprocess.run(
@@ -156,10 +156,54 @@ def setup_tmux(home: Path) -> StepResult:
         if not tmux_config.is_symlink():
             return step.add_result(False, f"Tmux conf already exists but is not symlinked: {tmux_config}")
         else:
-            return step.add_result(True, "Tmux conf already set up and linked")
+            step.add_result(True, "Tmux conf already set up and linked")
     else:
         tmux_config.symlink_to("tmux.conf")
-        return step.add_result(True, "Tmux conf linked to dotfile dir")
+        step.add_result(True, "Tmux conf linked to dotfile dir")
+
+    tmux_dir = home / ".tmux"
+
+    if not tmux_dir.exists():
+        tmux_dir.mkdir()
+        step.add_result(True, "Tmux dir created")
+    else:
+        step.add_result(True, "Tmux dir already exists")
+
+    plugins_dir = tmux_dir / "plugins"
+    if not plugins.exists():
+        plugins_dir.mkdir()
+        step.padd_result(True, "Tmux plugins dir created")
+    else:
+        step.add_result(True, "Tmux plugins dir already exists")
+
+    if (plugins_dir / "tpm").exists():
+        step.add_result(True, "TPM already installed")
+    else:
+        tpm_install = subprocess.run(
+            [
+                "git"
+                "clone"
+                "https://github.com/tmux-plugins/tpm"
+                "~/.tmux/plugins/tpm"
+            ]
+        )
+
+        if tpm_install.returncode != 0:
+            return step.add_result(False, f"TPM install failed: {tpm_install.stderr}")
+        else:
+            step.add_result(True, "TPM installl succeeded")
+
+    plugin_install = subproces.run(
+        [
+            str(plugins_dir / "tpm" / "bin" / "install_plugins")
+        ]
+    )
+    if plugin_install.returncode != 0:
+        return step.add_result(False, f"Plugin install failed: {plugin_install.stderr}")
+    else:
+        step.add_result(True, "Tmux plugins installed")
+
+    return step
 
 
 def main() -> None:
@@ -178,6 +222,12 @@ def main() -> None:
 
     python_result = setup_python(home)
     results.append(python_result)
+
+    homebrew_result = setup_homebrew()
+    results.append(homebrew_result)
+
+    tmux_result = setup_tmux(home)
+    results.append(tmux_result)
 
 
 if __name__ == "__main__":
