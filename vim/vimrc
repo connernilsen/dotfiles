@@ -4,22 +4,42 @@ filetype plugin indent on " turn on indentation and plugins for recognized file 
 " tab settings
 set shiftwidth=4 " number of spaces used in an auto indent step
 set shiftround " << and >> round to shiftwidth
-au BufNewFile,BufRead TARGETS set filetype=python
+aug filetypes
+    " clear all commands in this aug and recreate (otherwise they will be
+    " duplicated)
+    au!
+    " files with the pattern TARGETS are python files
+    au BufNewFile,BufRead TARGETS set filetype=python
+aug END
 set expandtab tabstop=4
 " NOTE: flip tabs/spaces with :retab
 
+
 " visual settings
 set number " show line numbers
+aug numbertoggle
+    au!
+    " show absolute line number and relative line numbers for currently active window
+    au BufEnter,FocusGained,InsertLeave,WinEnter * if &number && mode() != "i" | set rnu | endif
+    " show absolute line number for inactive windows
+    au BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+aug END
 set cursorline " light highlight for line showing cursor position
 set incsearch " show current typed in stuff
 set showmatch " jump to matching bracket
 set hlsearch " set highlight for last search until :noh
-set scrolloff=5 " number of lines to keep between cursor and top or bottom of buffer
+if winheight(0) <= 32
+    " when <= 32 lines in terminal, keep 5 lines between cursor and top or bottom
+    set scrolloff=5
+else
+    " otherwise, dynamically scale number of lines between cursor and top or bottom
+    let &scrolloff=float2nr(ceil(winheight(0)/4.5))
+endif
 set sidescrolloff=10 " number of cols to keep between cursor and left or right of buff
 set sidescroll=1 " scroll one character at a time
 set noshowmode " handled by lightline
-set lcs=tab:<->,trail:· " show markings for tabs and trailing spaces
-hi link tab Error " highlight tabs as errors
+set list  " show hidden characters
+set lcs=tab:>-,trail:·,extends:>,precedes:< " markings to show for hidden characters
 
 " behavior settings
 set autoindent " automatically set indent of new line
@@ -41,8 +61,7 @@ if !isdirectory(sdir)
     call mkdir(sdir, "", 0700)
 endif
 let sess="Obsess ".sdir " start session with `:execute sess`
-set completeopt=menu,preview,noinsert " when completing with
-" Ctrl + N in insert mode, don't insert values
+set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax enable " enable syntax highlighting
 set splitbelow " split new windows on bottom
@@ -101,14 +120,15 @@ call vundle#end()
 " :PluginClean - confirms removal of unused plugins
 " see :h vundle for help
 
-" setup vim-javascript
-let g:typescript_indent_disable=1
-
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
 let g:indent_guides_guide_size=4
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
+aug colorscheme
+    au!
+    " set cholor scheme and indent guides
+    au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
+aug END
 
 " format on save
 let g:ale_fix_on_save = 1
