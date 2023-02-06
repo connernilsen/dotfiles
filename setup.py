@@ -47,11 +47,10 @@ def setup_vim(home: Path, dotfile: Path) -> StepResult:
 
     if vim_dir.exists():
         if not vim_dir.is_symlink():
-            return 
-                step.add_result(
+            return step.add_result(
                     False,
                     f"Vim directory already exists but is not symlinked. \
-                Move directory to set up vim: {vim_dir}",
+                    Move directory to set up vim: {vim_dir}",
                 )
         else:
             step.add_result(True, "Vim directory already set up")
@@ -85,7 +84,7 @@ def setup_vim(home: Path, dotfile: Path) -> StepResult:
             step.add_result(True, "Cloned vundle")
 
     plugin_install = subprocess.run(["vim", "+PluginInstall", "+qall"], text=True)
-    if plugin_install.retruncode != 0:
+    if plugin_install.returncode != 0:
         step.add_result(False, f"Error installing vundle plugins: {plugin_install.stderr}")
 
     return step

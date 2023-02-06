@@ -3,3 +3,4 @@ undo-dir
 bundle
 .netrwhist
 session-dir
+__pycache__
