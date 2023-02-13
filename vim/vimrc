@@ -108,6 +108,9 @@ Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'                " fuzzy finder
 Plugin 'dense-analysis/ale'              " async lint engine
 Plugin 'maximbaz/lightline-ale'          " lightline support for ALE 
+Plugin 'google/vim-searchindex'          " count number of searches returned from / or ?
+Plugin 'chrisbra/NrrwRgn'               " narrow to selected region with :NW/NR
+Plugin 'simplefold'                      " auto populate folds for many languages
 
 " Plugin list end
 call vundle#end()
@@ -119,6 +122,10 @@ call vundle#end()
 " :PluginSearch foo - searches for foo
 " :PluginClean - confirms removal of unused plugins
 " see :h vundle for help
+
+" only lint on save TODO: is this fixing the segfault issue?
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
@@ -205,15 +212,15 @@ let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 
 let s:opam_configuration = {}
 
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+"function! OpamConfOcpIndent()
+"  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+"endfunction
+"let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+"
+"function! OpamConfOcpIndex()
+"  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+"endfunction
+"let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
 
 function! OpamConfMerlin()
   let l:dir = s:opam_share_dir . "/merlin/vim"
@@ -221,7 +228,7 @@ function! OpamConfMerlin()
 endfunction
 let s:opam_configuration['merlin'] = function('OpamConfMerlin')
 
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_packages = ["merlin"] " \"ocp-indent\", \"ocp-index\"]
 let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
 let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
 for tool in s:opam_packages
@@ -232,7 +239,7 @@ for tool in s:opam_packages
 endfor
 " ## end of OPAM user-setup addition for vim / base ## keep this line
 " ## added by OPAM user-setup for vim / ocp-indent ## 384537deb83808602c18b93aefa51543 ## you can edit, but keep this line
-if count(s:opam_available_tools,"ocp-indent") == 0
-  source "/home/connernilsen/.opam/4.14.0/share/ocp-indent/vim/indent/ocaml.vim"
-endif
+" if count(s:opam_available_tools,"ocp-indent") == 0
+"   source "/home/connernilsen/.opam/4.14.0/share/ocp-indent/vim/indent/ocaml.vim"
+" endif
 " ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
