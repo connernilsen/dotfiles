@@ -112,6 +112,7 @@ Plugin 'google/vim-searchindex'          " count number of searches returned fro
 Plugin 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
 Plugin 'pseewald/vim-anyfold'            " auto populate folds for many languages
 Plugin 'konfekt/fastfold'                " only update fold information on fold operations
+Plugin 'tpope/vim-surround'              " plugin for working with text objects
 
 " Plugin list end
 call vundle#end()
