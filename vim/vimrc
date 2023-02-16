@@ -109,8 +109,9 @@ Plugin 'junegunn/fzf.vim'                " fuzzy finder
 Plugin 'dense-analysis/ale'              " async lint engine
 Plugin 'maximbaz/lightline-ale'          " lightline support for ALE 
 Plugin 'google/vim-searchindex'          " count number of searches returned from / or ?
-Plugin 'chrisbra/NrrwRgn'               " narrow to selected region with :NW/NR
-Plugin 'simplefold'                      " auto populate folds for many languages
+Plugin 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
+Plugin 'pseewald/vim-anyfold'            " auto populate folds for many languages
+Plugin 'konfekt/fastfold'                " only update fold information on fold operations
 
 " Plugin list end
 call vundle#end()
@@ -126,6 +127,22 @@ call vundle#end()
 " only lint on save TODO: is this fixing the segfault issue?
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
+
+let g:LargeFile = 1000000 " file is large if size greater than 1MB
+aug anyfold
+    au!
+    au Filetype * AnyFoldActivate " activate folding for all filetypes
+aug end
+" disable anyfold for large files
+au BufReadPre,BufRead * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
+function LargeFile()
+    aug anyfold
+        au! " remove AnyFoldActivate
+        au Filetype <filetype> setlocal foldmethod=indent " fall back to indent folding
+    aug END
+endfunction
+
+
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
