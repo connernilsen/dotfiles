@@ -67,7 +67,6 @@ syntax enable " enable syntax highlighting
 set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
-" set hidden " allow hiding buffers if they aren't saved
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == "Darwin\n"
@@ -113,6 +112,7 @@ Plugin 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
 Plugin 'pseewald/vim-anyfold'            " auto populate folds for many languages
 Plugin 'konfekt/fastfold'                " only update fold information on fold operations
 Plugin 'tpope/vim-surround'              " plugin for working with text objects
+Plugin 'kien/rainbow_parentheses.vim'
 
 " Plugin list end
 call vundle#end()
@@ -211,12 +211,22 @@ nnoremap <silent> <C-b> :call comfortable_motion#flick(g:comfortable_motion_impu
 
 " completion engine with ALE
 set omnifunc=ale#completion#OmniFunc
-
-" ocaml stuff
-
 " go to next errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+
+" turn on rainbow parentheses by default
+aug rainbowparens
+    au!
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
+    au Syntax * RainbowParenthesesLoadChevrons
+aug END
+
+" ocaml stuff
 
 if system("opam --version")
     let g:opamshare = substitute(system('opam config var share'),'\n$','','''') . "/merlin/vim"
