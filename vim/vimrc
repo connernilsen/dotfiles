@@ -56,11 +56,11 @@ endif
 set undodir=~/.vim/undo-dir " set undo directory
 set undofile " save and restore undo history when editing files
 " create session directory (NOTE: this doesn't populate anything there)
-let sdir=$HOME."/.vim/session-dir"
+let sdir=$HOME."/.vim/session-dir/"
 if !isdirectory(sdir)
     call mkdir(sdir, "", 0700)
 endif
-let sess="Obsess ".sdir " start session with `:execute sess`
+let g:workspace_session_directory=sdir " create a new workspace with \s
 set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax enable " enable syntax highlighting
@@ -92,7 +92,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'drewtempelmeyer/palenight.vim' " theme
 Plugin 'dracula/vim',{'name':'dracula'}  " theme
 Plugin 'itchyny/lightline.vim'           " meta info at bottom of screen
-Plugin 'tpope/vim-obsession'             " vim sessions (reopen window session)
+Plugin 'thaerkh/vim-workspace'
 Plugin 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plugin 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plugin 'sheerun/vim-polyglot'            " language helpers
@@ -225,6 +225,12 @@ aug rainbowparens
     au Syntax * RainbowParenthesesLoadBraces
     au Syntax * RainbowParenthesesLoadChevrons
 aug END
+
+" workspace settings
+nnoremap <leader>s :ToggleWorkspace<CR>
+let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
+let g:workspace_autosave_always=1 " autosave when leaving insert, idling, or switching buffers
+let g:workspace_persist_undo_history=0 " use vim default undo history
 
 " ocaml stuff
 
