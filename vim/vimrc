@@ -9,7 +9,7 @@ aug filetypes
     " duplicated)
     au!
     " files with the pattern TARGETS are python files
-    au BufNewFile,BufRead TARGETS set filetype=python
+    " au BufNewFile,BufRead TARGETS set filetype=python
 aug END
 set expandtab tabstop=4
 " NOTE: flip tabs/spaces with :retab
@@ -193,12 +193,7 @@ let g:lightline.active = {
   \            [ 'percent' ],
   \            [ 'fileformat', 'filetype'], ],
   \ 'left':  [ [ 'mode', 'paste' ],
-  \            [ 'readonly', 'filename', 'modified' ],
-  \            [ 'obsession_status' ], ],
-  \ }
-
-let g:lightline.component_function = {
-  \ "obsession_status": "ObsessionStatus"
+  \            [ 'readonly', 'filename', 'modified' ], ],
   \ }
 
 " comfortable motion setup
@@ -229,7 +224,7 @@ aug END
 " workspace settings
 nnoremap <leader>s :ToggleWorkspace<CR>
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
-let g:workspace_autosave_always=1 " autosave when leaving insert, idling, or switching buffers
+let g:workspace_autosave_always=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
 
 " ocaml stuff
