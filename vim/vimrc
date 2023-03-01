@@ -24,6 +24,7 @@ aug numbertoggle
     " show absolute line number for inactive windows
     au BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
 aug END
+set t_Co=256
 set cursorline " light highlight for line showing cursor position
 set incsearch " show current typed in stuff
 set showmatch " jump to matching bracket
@@ -92,12 +93,14 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'drewtempelmeyer/palenight.vim' " theme
 Plugin 'dracula/vim',{'name':'dracula'}  " theme
 Plugin 'itchyny/lightline.vim'           " meta info at bottom of screen
-Plugin 'thaerkh/vim-workspace'
+Plugin 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plugin 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plugin 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plugin 'sheerun/vim-polyglot'            " language helpers
 Plugin 'jiangmiao/auto-pairs'            " helpers for parentheses
-Plugin 'yuttie/comfortable-motion.vim'   " smooth scroll up/down/page/back
+if v:version > 802                       " plugin only works on vim 8.2.1978+
+    Plugin 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
+endif
 Plugin 'breuckelen/vim-resize'           " easy resize with arrow keys
 Plugin 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
 Plugin 'blueyed/vim-diminactive'         " dim inactive windows
@@ -112,7 +115,8 @@ Plugin 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
 Plugin 'pseewald/vim-anyfold'            " auto populate folds for many languages
 Plugin 'konfekt/fastfold'                " only update fold information on fold operations
 Plugin 'tpope/vim-surround'              " plugin for working with text objects
-Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
+Plugin 'will133/vim-dirdiff'             " diff a directory
 
 " Plugin list end
 call vundle#end()
@@ -195,14 +199,6 @@ let g:lightline.active = {
   \ 'left':  [ [ 'mode', 'paste' ],
   \            [ 'readonly', 'filename', 'modified' ], ],
   \ }
-
-" comfortable motion setup
-let g:comfortable_motion_no_default_key_mappings = 1
-let g:comfortable_motion_impulse_multiplier = 1  
-nnoremap <silent> <C-d> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 1.5)<CR>
-nnoremap <silent> <C-u> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -1.5)<CR>
-nnoremap <silent> <C-f> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 3)<CR>
-nnoremap <silent> <C-b> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -3)<CR>
 
 " completion engine with ALE
 set omnifunc=ale#completion#OmniFunc
