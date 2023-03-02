@@ -9,7 +9,7 @@ aug filetypes
     " duplicated)
     au!
     " files with the pattern TARGETS are python files
-    au BufNewFile,BufRead TARGETS set filetype=python
+    " au BufNewFile,BufRead TARGETS set filetype=python
 aug END
 set expandtab tabstop=4
 " NOTE: flip tabs/spaces with :retab
@@ -24,6 +24,7 @@ aug numbertoggle
     " show absolute line number for inactive windows
     au BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
 aug END
+set t_Co=256
 set cursorline " light highlight for line showing cursor position
 set incsearch " show current typed in stuff
 set showmatch " jump to matching bracket
@@ -56,18 +57,17 @@ endif
 set undodir=~/.vim/undo-dir " set undo directory
 set undofile " save and restore undo history when editing files
 " create session directory (NOTE: this doesn't populate anything there)
-let sdir=$HOME."/.vim/session-dir"
+let sdir=$HOME."/.vim/session-dir/"
 if !isdirectory(sdir)
     call mkdir(sdir, "", 0700)
 endif
-let sess="Obsess ".sdir " start session with `:execute sess`
+let g:workspace_session_directory=sdir " create a new workspace with \s
 set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax enable " enable syntax highlighting
 set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
-" set hidden " allow hiding buffers if they aren't saved
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == "Darwin\n"
@@ -93,12 +93,14 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'drewtempelmeyer/palenight.vim' " theme
 Plugin 'dracula/vim',{'name':'dracula'}  " theme
 Plugin 'itchyny/lightline.vim'           " meta info at bottom of screen
-Plugin 'tpope/vim-obsession'             " vim sessions (reopen window session)
+Plugin 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plugin 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plugin 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plugin 'sheerun/vim-polyglot'            " language helpers
 Plugin 'jiangmiao/auto-pairs'            " helpers for parentheses
-Plugin 'yuttie/comfortable-motion.vim'   " smooth scroll up/down/page/back
+if v:version > 802                       " plugin only works on vim 8.2.1978+
+    Plugin 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
+endif
 Plugin 'breuckelen/vim-resize'           " easy resize with arrow keys
 Plugin 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
 Plugin 'blueyed/vim-diminactive'         " dim inactive windows
@@ -108,6 +110,13 @@ Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'                " fuzzy finder
 Plugin 'dense-analysis/ale'              " async lint engine
 Plugin 'maximbaz/lightline-ale'          " lightline support for ALE 
+Plugin 'google/vim-searchindex'          " count number of searches returned from / or ?
+Plugin 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
+Plugin 'pseewald/vim-anyfold'            " auto populate folds for many languages
+Plugin 'konfekt/fastfold'                " only update fold information on fold operations
+Plugin 'tpope/vim-surround'              " plugin for working with text objects
+Plugin 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
+Plugin 'will133/vim-dirdiff'             " diff a directory
 
 " Plugin list end
 call vundle#end()
@@ -119,6 +128,26 @@ call vundle#end()
 " :PluginSearch foo - searches for foo
 " :PluginClean - confirms removal of unused plugins
 " see :h vundle for help
+
+" only lint on save TODO: is this fixing the segfault issue?
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+
+let g:LargeFile = 1000000 " file is large if size greater than 1MB
+aug anyfold
+    au!
+    au Filetype * AnyFoldActivate " activate folding for all filetypes
+aug end
+" disable anyfold for large files
+au BufReadPre,BufRead * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
+function LargeFile()
+    aug anyfold
+        au! " remove AnyFoldActivate
+        au Filetype <filetype> setlocal foldmethod=indent " fall back to indent folding
+    aug END
+endfunction
+
+
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
@@ -168,30 +197,33 @@ let g:lightline.active = {
   \            [ 'percent' ],
   \            [ 'fileformat', 'filetype'], ],
   \ 'left':  [ [ 'mode', 'paste' ],
-  \            [ 'readonly', 'filename', 'modified' ],
-  \            [ 'obsession_status' ], ],
+  \            [ 'readonly', 'filename', 'modified' ], ],
   \ }
-
-let g:lightline.component_function = {
-  \ "obsession_status": "ObsessionStatus"
-  \ }
-
-" comfortable motion setup
-let g:comfortable_motion_no_default_key_mappings = 1
-let g:comfortable_motion_impulse_multiplier = 1  
-nnoremap <silent> <C-d> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 1.5)<CR>
-nnoremap <silent> <C-u> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -1.5)<CR>
-nnoremap <silent> <C-f> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 3)<CR>
-nnoremap <silent> <C-b> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -3)<CR>
 
 " completion engine with ALE
 set omnifunc=ale#completion#OmniFunc
-
-" ocaml stuff
-
 " go to next errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+
+" turn on rainbow parentheses by default
+aug rainbowparens
+    au!
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
+    au Syntax * RainbowParenthesesLoadChevrons
+aug END
+
+" workspace settings
+nnoremap <leader>s :ToggleWorkspace<CR>
+let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
+let g:workspace_autosave=0 " don't autosave automatically
+let g:workspace_persist_undo_history=0 " use vim default undo history
+
+" ocaml stuff
 
 if system("opam --version")
     let g:opamshare = substitute(system('opam config var share'),'\n$','','''') . "/merlin/vim"
@@ -205,15 +237,15 @@ let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 
 let s:opam_configuration = {}
 
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+"function! OpamConfOcpIndent()
+"  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+"endfunction
+"let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+"
+"function! OpamConfOcpIndex()
+"  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+"endfunction
+"let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
 
 function! OpamConfMerlin()
   let l:dir = s:opam_share_dir . "/merlin/vim"
@@ -221,7 +253,7 @@ function! OpamConfMerlin()
 endfunction
 let s:opam_configuration['merlin'] = function('OpamConfMerlin')
 
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_packages = ["merlin"] " \"ocp-indent\", \"ocp-index\"]
 let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
 let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
 for tool in s:opam_packages
@@ -232,7 +264,7 @@ for tool in s:opam_packages
 endfor
 " ## end of OPAM user-setup addition for vim / base ## keep this line
 " ## added by OPAM user-setup for vim / ocp-indent ## 384537deb83808602c18b93aefa51543 ## you can edit, but keep this line
-if count(s:opam_available_tools,"ocp-indent") == 0
-  source "/home/connernilsen/.opam/4.14.0/share/ocp-indent/vim/indent/ocaml.vim"
-endif
+" if count(s:opam_available_tools,"ocp-indent") == 0
+"   source "/home/connernilsen/.opam/4.14.0/share/ocp-indent/vim/indent/ocaml.vim"
+" endif
 " ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
