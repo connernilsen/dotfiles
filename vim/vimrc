@@ -219,6 +219,15 @@ aug rainbowparens
     au Syntax * RainbowParenthesesLoadChevrons
 aug END
 
+" peekaboo larger window
+if winwidth(0) < 60
+    let g:peekaboo_window="vert bo 30new"
+else
+    let g:peekaboo_window="vert bo ".float2nr(ceil(winwidth(0)/3))."new"
+endif
+
+
+
 " workspace settings
 nnoremap <leader>s :ToggleWorkspace<CR>
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
