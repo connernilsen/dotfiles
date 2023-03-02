@@ -119,6 +119,7 @@ Plugin 'tpope/vim-surround'              " plugin for working with text objects
 Plugin 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
 Plugin 'will133/vim-dirdiff'             " diff a directory
 Plugin 'Matt-A-Bennett/vim-surround-funk' " text objects for functionsasdf
+Plugin 'svermeulen/vim-yoink'            " ring buffer for yanks with :Yanks
 
 " Plugin list end
 call vundle#end()
@@ -226,7 +227,13 @@ else
     let g:peekaboo_window="vert bo ".float2nr(ceil(winwidth(0)/3))."new"
 endif
 
-
+" yoink settings
+nmap p <plug>(YoinkPaste_p)
+nmap P <plug>(YoinkPaste_P)
+nmap gp <plug>(YoinkPaste_gp)
+nmap gP <plug>(YoinkPaste_gP)
+nmap <c-n> <plug>(YoinkPostPasteSwapBack)
+nmap <c-p> <plug>(YoinkPostPasteSwapForward)
 
 " workspace settings
 nnoremap <leader>s :ToggleWorkspace<CR>
