@@ -68,6 +68,7 @@ syntax enable " enable syntax highlighting
 set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
+set foldlevel=99 " open all folds when entering file
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == "Darwin\n"
@@ -117,6 +118,7 @@ Plugin 'konfekt/fastfold'                " only update fold information on fold 
 Plugin 'tpope/vim-surround'              " plugin for working with text objects
 Plugin 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
 Plugin 'will133/vim-dirdiff'             " diff a directory
+Plugin 'Matt-A-Bennett/vim-surround-funk' " text objects for functionsasdf
 
 " Plugin list end
 call vundle#end()
