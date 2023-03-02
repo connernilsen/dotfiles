@@ -7,7 +7,7 @@ import subprocess
 """
 Install list
 
-ocaml: opam dune merlin ocamlformat
+ocaml: opam dune merlin ocamlformat ocaml-lsp-server
 """
 
 """
