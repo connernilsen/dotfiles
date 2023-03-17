@@ -79,10 +79,6 @@ else
   set clipboard=unnamedplus "Linux
 endif
 
-if has('nvim')
-  let &packpath = &runtimepath 
-endif
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -120,6 +116,11 @@ Plugin 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow
 Plugin 'will133/vim-dirdiff'             " diff a directory
 Plugin 'Matt-A-Bennett/vim-surround-funk' " text objects for functionsasdf
 Plugin 'svermeulen/vim-yoink'            " ring buffer for yanks with :Yanks
+"if has('nvim') || has('patch-8.0.902')   " show changes in gutter
+"  Plugin 'mhinz/vim-signify'
+"else
+"  Plugin 'mhinz/vim-signify', { 'tag': 'legacy' }
+"endif
 
 " Plugin list end
 call vundle#end()
