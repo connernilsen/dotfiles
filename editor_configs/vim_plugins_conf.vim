@@ -19,7 +19,8 @@ aug end
 au BufReadPre,BufRead * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
 function LargeFile()
     aug anyfold
-        au! " remove AnyFoldActivate
+        " remove AnyFoldActivate
+        au! 
         au Filetype <filetype> setlocal foldmethod=indent " fall back to indent folding
     aug END
 endfunction

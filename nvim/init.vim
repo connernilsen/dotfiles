@@ -11,9 +11,9 @@ endif
 " set the runtime path to include vim-plug and initialize
 call plug#begin('~/.config/nvim/bundle')
 
-source ~/dotfiles/vim_plugins_list.vim
+source ~/dotfiles/editor_configs/vim_plugins_list.vim
 
 " Plugin list end
 call plug#end()
 
-source ~/dotfiles/vim_plugins_conf.vim
+source ~/dotfiles/editor_configs/vim_plugins_conf.vim
