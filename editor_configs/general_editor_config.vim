@@ -51,13 +51,13 @@ set spell " highlight spelling mistakes
 set laststatus=2 " always show status line
 set visualbell " use visual bell instead of beeping
 " create undo directory
-if !isdirectory($HOME."/.vim/undo-dir")
-    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+if !isdirectory($HOME."/dotfiles/editor_configs/undo-dir")
+    call mkdir($HOME."/dotfiles/editor_configs/undo-dir", "", 0700)
 endif
 set undodir=~/.vim/undo-dir " set undo directory
 set undofile " save and restore undo history when editing files
 " create session directory (NOTE: this doesn't populate anything there)
-let sdir=$HOME."/.vim/session-dir/"
+let sdir=$HOME."/dotfiles/editor_configs/session-dir/"
 if !isdirectory(sdir)
     call mkdir(sdir, "", 0700)
 endif
