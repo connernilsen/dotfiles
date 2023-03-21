@@ -1,6 +1,8 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
+let confdir=$HOME."/dotfiles/nvim/"
+
 source ~/dotfiles/editor_configs/general_editor_config.vim
 
 " download and install vim-plug
