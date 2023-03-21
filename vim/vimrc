@@ -1,3 +1,5 @@
+let confdir=$HOME."/dotfiles/vim/"
+
 source ~/dotfiles/editor_configs/general_editor_config.vim
 
 " download and install vim-plug
