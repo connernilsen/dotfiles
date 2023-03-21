@@ -1,6 +1,8 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
+source ~/dotfiles/editor_configs/general_editor_config.vim
+
 " download and install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -17,3 +19,22 @@ source ~/dotfiles/editor_configs/vim_plugins_list.vim
 call plug#end()
 
 source ~/dotfiles/editor_configs/vim_plugins_conf.vim
+
+" temrinal settings for vim-like operation
+tnoremap <C-w><C-n> <C-\><C-n> 
+tnoremap <C-w>h <C-\><C-n><C-w>h 
+tnoremap <C-w>j <C-\><C-n><C-w>j
+tnoremap <C-w>k <C-\><C-n><C-w>k
+tnoremap <C-w>l <C-\><C-n><C-w>l
+
+" :T and :VT open terminals in new buffer instead of current
+command! T split | terminal
+command! VT vsplit | terminal
+
+aug terminal_config
+  au!
+  au TermOpen * set filetype=terminal
+  " leave terminal running when leaving
+  au BufLeave terminal :insert 
+aug END
+
