@@ -7,8 +7,8 @@ Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plug 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 Plug 'jiangmiao/auto-pairs'            " helpers for parentheses
-if v:version > 802                       " plugin only works on vim 8.2.1978+
-    Plugin 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
+if v:version > 802 || has('nvim')      " plugin only works on vim 8.2.1978+
+    Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
 endif
 Plug 'breuckelen/vim-resize'           " easy resize with arrow keys
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)

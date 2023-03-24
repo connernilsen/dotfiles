@@ -51,10 +51,10 @@ set spell " highlight spelling mistakes
 set laststatus=2 " always show status line
 set visualbell " use visual bell instead of beeping
 " create undo directory
-if !isdirectory(confdir."undo-dir")
-    call mkdir(confdir."undo-dir", "", 0700)
+let udir=confdir."undo-dir"
+if !isdirectory(udir)
+    call mkdir(udir, "", 0700)
 endif
-set undodir=~/.vim/undo-dir " set undo directory
 set undofile " save and restore undo history when editing files
 " create session directory (NOTE: this doesn't populate anything there)
 let sdir=confdir."session-dir/"
@@ -78,3 +78,4 @@ else
   set clipboard+=unnamedplus
   set clipboard=unnamedplus "Linux
 endif
+

@@ -1,6 +1,8 @@
 let confdir=$HOME."/dotfiles/vim/"
 
 source ~/dotfiles/editor_configs/general_editor_config.vim
+" this has to be copied explicitly here to work
+set undodir=~/.vim/undo-dir
 
 " download and install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'

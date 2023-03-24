@@ -2,8 +2,12 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
 let confdir=$HOME."/dotfiles/nvim/"
+" this has to be copied explicitly here to work
+set undodir=~/.config/nvim/undo-dir
 
 source ~/dotfiles/editor_configs/general_editor_config.vim
+
+set mouse=
 
 " download and install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -57,9 +61,11 @@ tnoremap <silent> <C-W>h      <cmd>call <SID>TermExec('wincmd h')<CR>
 tnoremap <silent> <C-W>j      <cmd>call <SID>TermExec('wincmd j')<CR>
 tnoremap <silent> <C-W>k      <cmd>call <SID>TermExec('wincmd k')<CR>
 tnoremap <silent> <C-W>l      <cmd>call <SID>TermExec('wincmd l')<CR>
+tnoremap <silent> <C-W>=      <cmd>call <SID>TermExec('wincmd =')<CR>
 tnoremap <silent> <C-W><C-H>  <cmd>call <SID>TermExec('wincmd h')<CR>
 tnoremap <silent> <C-W><C-J>  <cmd>call <SID>TermExec('wincmd j')<CR>
 tnoremap <silent> <C-W><C-K>  <cmd>call <SID>TermExec('wincmd k')<CR>
 tnoremap <silent> <C-W><C-L>  <cmd>call <SID>TermExec('wincmd l')<CR>
 tnoremap <silent> <C-W>gt     <cmd>call <SID>TermExec('tabn')<CR>
-tnoremap <silent> <C-W>gT     <cmd>call <SID>TermExec('tabp')<CR
+tnoremap <silent> <C-W>gT     <cmd>call <SID>TermExec('tabp')<CR>
+tnoremap <expr> <C-\><C-R>    '<C-\><C-N>"'.nr2char(getchar()).'pi'
