@@ -33,4 +33,5 @@ if has('nvim') || has('patch-8.0.902')   " show changes in gutter
 else
   Plug 'mhinz/vim-signify', { 'tag': 'legacy' }
 endif
+" Plug 'puremourning/vimspector'         " debugger built into vim
 

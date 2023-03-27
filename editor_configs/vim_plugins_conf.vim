@@ -1,12 +1,3 @@
-" Brief help
-" :PluginList - list plugins
-" :PluginInstall - installs plugins
-" :PluginUpdate - update plugin
-" :PluginSearch foo - searches for foo
-" :PluginClean - confirms removal of unused plugins
-" see :h vundle for help
-
-" only lint on save TODO: is this fixing the segfault issue?
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 
@@ -115,4 +106,11 @@ nnoremap <leader>s :ToggleWorkspace<CR>
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
 let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
+
+" ocaml settings (if opam and merlin installed)
+if system("opam --version") && system("opam list --installed --short --safe --color=never --check merlin")
+    let g:opam_share_dir = substitute(system('opam var share'),'[\r\n]*$','','''') . "/merlin/vim"
+    set rtp+=g:opam_share_dir
+    set rtp^=g:opam_share_dir."/ocp-indent/vim"
+endif
 

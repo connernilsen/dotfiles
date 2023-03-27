@@ -19,10 +19,17 @@ set expandtab tabstop=4
 set number " show line numbers
 aug numbertoggle
     au!
-    " show absolute line number and relative line numbers for currently active window
-    au BufEnter,FocusGained,InsertLeave,WinEnter * if &number && mode() != "i" | set rnu | endif
-    " show absolute line number for inactive windows
-    au BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+    if has('nvim')
+        " show absolute line number and relative line numbers for currently active window
+        au BufWinEnter,FocusGained,InsertLeave,WinEnter * if &number && mode() != "i" | set rnu | endif
+        " show absolute line number for inactive windows
+        au BufWinLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+    else
+        " show absolute line number and relative line numbers for currently active window
+        au BufEnter,FocusGained,InsertLeave,WinEnter * if &number && mode() != "i" | set rnu | endif
+        " show absolute line number for inactive windows
+        au BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+    endif
 aug END
 set t_Co=256
 set cursorline " light highlight for line showing cursor position
