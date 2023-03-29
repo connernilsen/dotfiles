@@ -69,3 +69,18 @@ tnoremap <silent> <C-W><C-L>  <cmd>call <SID>TermExec('wincmd l')<CR>
 tnoremap <silent> <C-W>gt     <cmd>call <SID>TermExec('tabn')<CR>
 tnoremap <silent> <C-W>gT     <cmd>call <SID>TermExec('tabp')<CR>
 tnoremap <expr> <C-\><C-R>    '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+" map <g><d> to :ALEGoToDef
+
+function ALELSPMappings()
+  let l:lsp_found=0
+  for l:linter in ale#linter#Get(&filetype) | if !empty(l:linter.lsp) | let l:lsp_found=1 | endif | endfor
+  if (l:lsp_found)
+    nnoremap <buffer> gd :ALEGoToDefinition -split<CR>
+    nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>
+    nnoremap <buffer> gr :ALEFindReferences<CR>
+  endif
+endfunction
+aug ALELSPMap
+  au BufRead,FileType * call ALELSPMappings()
+aug END

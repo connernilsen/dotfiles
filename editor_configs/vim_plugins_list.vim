@@ -6,7 +6,7 @@ Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when call
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plug 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
-Plug 'jiangmiao/auto-pairs'            " helpers for parentheses
+" Plug 'jiangmiao/auto-pairs'            " helpers for parentheses
 if v:version > 802 || has('nvim')      " plugin only works on vim 8.2.1978+
     Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
 endif
@@ -34,4 +34,4 @@ else
   Plug 'mhinz/vim-signify', { 'tag': 'legacy' }
 endif
 " Plug 'puremourning/vimspector'         " debugger built into vim
-
+Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
