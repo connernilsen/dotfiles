@@ -114,3 +114,15 @@ if system("opam --version") && system("opam list --installed --short --safe --co
     set rtp^=g:opam_share_dir."/ocp-indent/vim"
 endif
 
+" slime setup <C-c><C-c> to send over selection
+" run :echo &channel in the terminal you want to use to get the job id
+let g:slime_target = "neovim"
+let g:slime_python_ipython = 1
+let g:slime_cell_delimiter = "^\\s*##"
+let g:slime_bracketed_paste = 1
+let g:slime_no_mappings = 1
+nmap <c-c>v <Plug>SlimeConfig
+nmap <c-c><c-c> <Plug>SlimeCellsSendAndGoToNext
+" these won't work on mac
+nmap <c-c><c-Down> <Plug>SlimeCellsNext
+nmap <c-c><c-Up> <Plug>SlimeCellsPrev

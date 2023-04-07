@@ -35,3 +35,6 @@ else
 endif
 " Plug 'puremourning/vimspector'         " debugger built into vim
 Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
+Plug 'jpalardy/vim-slime'              " send text to other terminal
+Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
+" Plug 'sillybun/vim-repl'             " maybe backup ipython runner
