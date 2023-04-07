@@ -3,4 +3,4 @@ undo-dir
 bundle
 .netrwhist
 session-dir
-__pycache__
+vim/autoload/plug.vim

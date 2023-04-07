@@ -2,27 +2,28 @@
 
 This repository contains the set of dotfiles and configurations I would like shared between the computers and environments I commonly work in.
 
+> Note: the vim config is no longer maintained. Some plugins may not behave correctly or cause vim to crash.
+
 ## Setup
 
-1. Install vim/neovim
-2. Install [Vim-Plug](https://github.com/junegunn/vim-plug)
-3. Symlink files:
+1. Install/Compile neovim
+2. Symlink files:
   - `ln -s dotfiles/tmux.conf .tmux.conf`
-  - `ln -s dotfiles/vim .vim`
   - `ln -s dotfiles/nvim .config/nvim`
-4. Run `:PlugInstall` in vim/nvim
-5. Install the following packages:
+  - `ln -s dotfiles/vim .vim` (if using vim)
+3. Run `:PlugInstall` in nvim
+4. Install the following packages:
   - `htop`
   - `ripgrep`
   - `tmux`
-6. Install [TPM](https://github.com/tmux-plugins/tpm)
-7. Set the following options in .bashrc/.zshrc/...
+5. Install [TPM](https://github.com/tmux-plugins/tpm)
+6. Set the following options in .bashrc/.zshrc/...
 ```
-export EDITOR=vim # or nvim
+export EDITOR=nvim
 export CLICOLOR=1
 export TERM="xterm-256color"
 ```
-8. Install language helpers:
+7. Install language helpers:
   - python
     - `autoimport`
     - `pyre-check`
