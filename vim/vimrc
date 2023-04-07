@@ -58,7 +58,8 @@ if !isdirectory(udir)
   call mkdir(udir, "", 0700)
 endif
 set undofile " save and restore undo history when editing files
-set undodir=~/.vim/undo-dir " set the directory undofiles will be saved in
+" set directory for storing and loading undofiles
+set undodir=~/.vim/undo-dir 
 " create session directory (NOTE: this doesn't populate anything there)
 let sdir=confdir."session-dir/"
 if !isdirectory(sdir)
@@ -153,8 +154,6 @@ function LargeFile()
     au Filetype <filetype> setlocal foldmethod=indent " fall back to indent folding
   aug END
 endfunction
-
-
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
