@@ -1,6 +1,6 @@
 let &packpath = &runtimepath
 
-let confdir=$HOME."/dotfiles/nvim/"
+let confdir=$HOME.'/dotfiles/nvim/'
 
 set nocompatible " don't use vi compatibility
 filetype plugin indent on " turn on indentation and plugins for recognized file types
@@ -24,9 +24,15 @@ set number " show line numbers
 aug numbertoggle
   au!
   " show absolute line number and relative line numbers for currently active window
-  au BufWinEnter,FocusGained,InsertLeave,WinEnter * if &number && mode() != "i" | set rnu | endif
+  au BufWinEnter,FocusGained,InsertLeave,WinEnter * 
+        \ if &number && mode() != 'i' 
+        \ | set rnu 
+        \ | endif
   " show absolute line number for inactive windows
-  au BufWinLeave,FocusLost,InsertEnter,WinLeave * if &number | set nornu | endif
+  au BufWinLeave,FocusLost,InsertEnter,WinLeave * 
+        \ if &number 
+        \ | set nornu 
+        \ | endif
 aug END
 set t_Co=256
 set cursorline " light highlight for line showing cursor position
@@ -55,17 +61,17 @@ set spell " highlight spelling mistakes
 set laststatus=2 " always show status line
 set visualbell " use visual bell instead of beeping
 " create undo directory
-let udir=confdir."undo-dir"
+let udir=confdir.'undo-dir'
 if !isdirectory(udir)
-  call mkdir(udir, "", 0700)
+  call mkdir(udir, '', 0700)
 endif
 set undofile " save and restore undo history when editing files
 " set directory for storing and loading undofiles
 set undodir=~/.config/nvim/undo-dir 
 " create session directory (NOTE: this doesn't populate anything there)
-let sdir=confdir."session-dir/"
+let sdir=confdir.'session-dir/'
 if !isdirectory(sdir)
-  call mkdir(sdir, "", 0700)
+  call mkdir(sdir, '', 0700)
 endif
 let g:workspace_session_directory=sdir " create a new workspace with \s
 set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
@@ -75,9 +81,10 @@ set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
 set foldlevel=99 " open all folds when entering file
+set colorcolumn=80 " set line length marker
 
 " set clipboard settings (might need xclip)
-if system('uname -s') == "Darwin\n"
+if system('uname -s') == 'Darwin\n'
   set clipboard=unnamed "OSX
   set clipboard+=unnamedplus
 else
@@ -89,7 +96,13 @@ set mouse=  " clicking won't move the cursor, and you can copy directly off the 
 " download and install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  echo "*********Installing vim-plug*********"
+  " convert back to one line if this fails
+  execute 
+        \ '!curl -fLo '
+        \ .data_dir
+        \ .'/autoload/plug.vim --create-dirs 
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -106,7 +119,6 @@ Plug 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 " Plug 'jiangmiao/auto-pairs'            " helpers for parentheses
 Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
-Plug 'breuckelen/vim-resize'           " easy resize with arrow keys
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
 Plug 'blueyed/vim-diminactive'         " dim inactive windows
 Plug 'ervandew/supertab'               " tab completion
@@ -124,12 +136,11 @@ Plug 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow c
 Plug 'will133/vim-dirdiff'             " diff a directory
 Plug 'Matt-A-Bennett/vim-surround-funk' " text objects for functionsasdf
 Plug 'svermeulen/vim-yoink'            " ring buffer for yanks with :Yanks
-Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-signify'               " great source control info in gutter/with commands
 " Plug 'puremourning/vimspector'         " debugger built into vim
 Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
 Plug 'jpalardy/vim-slime'              " send text to other terminal
 Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
-" Plug 'sillybun/vim-repl'             " maybe backup ipython runner
 
 " Plugin list end
 call plug#end()
@@ -143,7 +154,11 @@ aug anyfold
   au Filetype * AnyFoldActivate " activate folding for all filetypes
 aug end
 " disable anyfold for large files
-au BufReadPre,BufRead * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
+au BufReadPre,BufRead * 
+            \ let f=getfsize(expand('<afile>')) 
+            \ | if f > g:LargeFile || f == -2 
+            \ | call LargeFile() 
+            \ | endif
 function LargeFile()
   aug anyfold
     " remove AnyFoldActivate
@@ -166,7 +181,7 @@ aug END
 let g:ale_fix_on_save = 1
 
 " use enhanced coloring if possible
-if (has("termguicolors"))
+if (has('termguicolors'))
   set termguicolors
 endif
 
@@ -195,7 +210,8 @@ let g:lightline.component_type = {
       \ }
 
 let g:lightline.active = {
-      \ 'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+      \ 'right': [ [ 'linter_checking', 'linter_errors', 
+      \             'linter_warnings', 'linter_infos', 'linter_ok' ],
       \            [ 'lineinfo' ],
       \            [ 'percent' ],
       \            [ 'fileformat', 'filetype'], ],
@@ -222,9 +238,9 @@ aug END
 
 " peekaboo larger window
 if winwidth(0) < 60
-  let g:peekaboo_window="vert bo 30new"
+  let g:peekaboo_window='vert bo 30new'
 else
-  let g:peekaboo_window="vert bo ".float2nr(ceil(winwidth(0)/3))."new"
+  let g:peekaboo_window='vert bo '.float2nr(ceil(winwidth(0)/3)).'new'
 endif
 
 " yoink settings
@@ -242,18 +258,21 @@ let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
 
 " ocaml settings (if opam and merlin installed)
-if system("opam --version") && system("opam list --installed --short --safe --color=never --check merlin")
-  let g:opam_share_dir = substitute(system('opam var share'),'[\r\n]*$','','''') . "/merlin/vim"
+if system('opam --version') && 
+            \ system('opam list --installed --short --safe --color=never --check merlin')
+  let g:opam_share_dir = 
+              \ substitute(system('opam var share'),'[\r\n]*$','','''') . 
+              \ '/merlin/vim'
   set rtp+=g:opam_share_dir
-  set rtp^=g:opam_share_dir."/ocp-indent/vim"
+  set rtp^=g:opam_share_dir.'/ocp-indent/vim'
 endif
 
 " slime setup <C-c><C-c> to send over selection
 " run :echo &channel in the terminal you want to use to get the job id
 " Note: can reset job id if channel number changes with <C-c>v
-let g:slime_target = "neovim"
+let g:slime_target = 'neovim'
 let g:slime_python_ipython = 1
-let g:slime_cell_delimiter = "^\\s*##"
+let g:slime_cell_delimiter = '^\\s*##'
 let g:slime_bracketed_paste = 1
 let g:slime_no_mappings = 1
 nmap <c-c>v <Plug>SlimeConfig
@@ -281,7 +300,8 @@ function! <SID>TermExec(cmd)
 endfunction
 
 augroup Term
-    au CmdlineLeave,WinEnter,BufWinEnter * call timer_start(0, function('s:TermEnter'), {})
+    au CmdlineLeave,WinEnter,BufWinEnter * 
+                \ call timer_start(0, function('s:TermEnter'), {})
     au TermEnter term://* setlocal nonu nornu
     au TermLeave term://* setlocal nu rnu
 augroup end
@@ -291,7 +311,7 @@ tnoremap <silent> <C-W>.      <C-W>
 tnoremap <silent> <C-W><C-.>  <C-W>
 tnoremap <silent> <C-W><C-\>  <C-\>
 tnoremap <silent> <C-W>N      <C-\><C-N>
-tnoremap <silent> <C-W>:      <C-\><C-N>:call <SID>TermExec('call feedkeys(":")')<CR>
+tnoremap <silent> <C-W>:      <C-\><C-N>:call <SID>TermExec('call feedkeys(':')')<CR>
 tnoremap <silent> <C-W><C-W>  <cmd>call <SID>TermExec('wincmd w')<CR>
 tnoremap <silent> <C-W>h      <cmd>call <SID>TermExec('wincmd h')<CR>
 tnoremap <silent> <C-W>j      <cmd>call <SID>TermExec('wincmd j')<CR>
@@ -310,7 +330,11 @@ tnoremap <expr> <C-\><C-R>    '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 function ALELSPMappings()
     let l:lsp_found=0
-    for l:linter in ale#linter#Get(&filetype) | if !empty(l:linter.lsp) | let l:lsp_found=1 | endif | endfor
+    for l:linter in ale#linter#Get(&filetype) 
+                \ | if !empty(l:linter.lsp) 
+                \ | let l:lsp_found=1 
+                \ | endif 
+                \ | endfor
     if (l:lsp_found)
         nnoremap <buffer> gd :ALEGoToDefinition -split<CR>
         nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>

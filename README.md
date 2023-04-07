@@ -16,6 +16,8 @@ This repository contains the set of dotfiles and configurations I would like sha
   - `htop`
   - `ripgrep`
   - `tmux`
+  - `fzf` (should be auto installed by nvim)
+  - `vim-plug` (should be auto installed by nvim)
 5. Install [TPM](https://github.com/tmux-plugins/tpm)
 6. Set the following options in .bashrc/.zshrc/...
 ```
