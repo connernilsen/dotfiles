@@ -5,6 +5,8 @@ let confdir=$HOME.'/dotfiles/nvim/'
 set nocompatible " don't use vi compatibility
 filetype plugin indent on " turn on indentation and plugins for recognized file types
 
+let mapleader=' ' " sets <leader> to ' '
+
 " tab settings
 set shiftwidth=4 " number of spaces used in an auto indent step
 set shiftround " << and >> round to shiftwidth
@@ -117,11 +119,13 @@ Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when call
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plug 'nathanaelkane/vim-indent-guides' " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
-" Plug 'jiangmiao/auto-pairs'            " helpers for parentheses
 Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
 Plug 'blueyed/vim-diminactive'         " dim inactive windows
 Plug 'ervandew/supertab'               " tab completion
+" would like to switch to this at some point if possible (need to check FAQ to
+" work with vim-visual-multi)
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " fuzzy completion
 Plug 'junegunn/vim-peekaboo'           " check registers when ctrl + r
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'                " fuzzy finder
@@ -141,9 +145,14 @@ Plug 'mhinz/vim-signify'               " great source control info in gutter/wit
 Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
 Plug 'jpalardy/vim-slime'              " send text to other terminal
 Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
+Plug 'sjl/gundo.vim'                   " show history tree with <F5>
+" Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
+Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>[fFwW]
 
 " Plugin list end
 call plug#end()
+
+let g:deoplete#enable_at_startup = 1
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
@@ -252,7 +261,7 @@ nmap <c-n> <plug>(YoinkPostPasteSwapBack)
 nmap <c-p> <plug>(YoinkPostPasteSwapForward)
 
 " workspace settings
-nnoremap <leader>s :ToggleWorkspace<CR>
+nnoremap <leader><leader>s :ToggleWorkspace<CR> " toggle tracking workspace
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
 let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
@@ -344,3 +353,11 @@ endfunction
 aug ALELSPMap
     au BufRead,FileType * call ALELSPMappings()
 aug END
+
+" gundo
+nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
+
+" easymotion
+let g:EasyMotion_do_mapping = 0 " disable defaults
+nmap <leader>s <Plug>(easymotion-overwin-f) 
+
