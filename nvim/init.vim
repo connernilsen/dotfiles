@@ -147,7 +147,7 @@ Plug 'jpalardy/vim-slime'              " send text to other terminal
 Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
 Plug 'sjl/gundo.vim'                   " show history tree with <F5>
 " Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
-Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>[fFwW]
+Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
 
 " Plugin list end
 call plug#end()
@@ -277,9 +277,9 @@ if system('opam --version') &&
 endif
 
 " slime setup <C-c><C-c> to send over selection
-" run :echo &channel in the terminal you want to use to get the job id
+" find tmux pane with <C-b>q and set with `:.<pane_num>`
 " Note: can reset job id if channel number changes with <C-c>v
-let g:slime_target = 'neovim'
+let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
 let g:slime_cell_delimiter = '^\\s*##'
 let g:slime_bracketed_paste = 1
@@ -290,7 +290,7 @@ nmap <c-c><c-c> <Plug>SlimeCellsSendAndGoToNext
 nmap <c-c><c-Down> <Plug>SlimeCellsNext
 nmap <c-c><c-Up> <Plug>SlimeCellsPrev
 
-" temrinal settings for vim-like operation
+" terminal settings for vim-like operation
 
 " :T and :VT open terminals in new buffer instead of current
 command! T split | terminal
