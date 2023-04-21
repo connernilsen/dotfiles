@@ -117,7 +117,7 @@ Plug 'dracula/vim',{'name':'dracula'}  " theme
 Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
 Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
-Plug 'nathanaelkane/vim-indent-guides' " show indentation guides
+Plug 'preservim/vim-indent-guides' " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
@@ -179,11 +179,11 @@ endfunction
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
-let g:indent_guides_guide_size=4
 aug coloring
   au!
   " set color scheme and indent guides
   au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
+  au BufWinEnter,WinEnter * let g:indent_guides_size=&shiftwidth
 aug END
 
 " format on save
@@ -345,9 +345,11 @@ function ALELSPMappings()
                 \ | endif 
                 \ | endfor
     if (l:lsp_found)
-        nnoremap <buffer> gd :ALEGoToDefinition -split<CR>
+        nnoremap <buffer> gd :ALEGoToDefinition<CR>
+        nnoremap <buffer> <leader>gd :ALEGoToDefinition -split<CR>
         nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>
         nnoremap <buffer> gr :ALEFindReferences<CR>
+        nnoremap <buffer> gR :ALERepeatSelection<CR>
     endif
 endfunction
 aug ALELSPMap
