@@ -363,3 +363,5 @@ nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
 let g:EasyMotion_do_mapping = 0 " disable defaults
 nmap <leader>s <Plug>(easymotion-overwin-f) 
 
+" vimade fade with TMUX
+let g:vimade.enablefocusfading = 1
