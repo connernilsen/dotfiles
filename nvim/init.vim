@@ -117,11 +117,11 @@ Plug 'dracula/vim',{'name':'dracula'}  " theme
 Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
 Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
-Plug 'preservim/vim-indent-guides' " show indentation guides
+Plug 'preservim/vim-indent-guides'     " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
-Plug 'psliwka/vim-smoothie'        " smooth scroll up/down/page/back
+Plug 'psliwka/vim-smoothie'            " smooth scroll up/down/page/back
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
-Plug 'blueyed/vim-diminactive'         " dim inactive windows
+Plug 'TaDaa/vimade'                    " dim inactive windows
 Plug 'ervandew/supertab'               " tab completion
 " would like to switch to this at some point if possible (need to check FAQ to
 " work with vim-visual-multi)
