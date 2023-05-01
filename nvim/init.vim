@@ -121,7 +121,7 @@ Plug 'preservim/vim-indent-guides'     " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 Plug 'psliwka/vim-smoothie'            " smooth scroll up/down/page/back
 Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
-Plug 'TaDaa/vimade'                    " dim inactive windows
+Plug 'TaDaa/vimade'                    " dim inactive windows (config in after/plugin)
 Plug 'ervandew/supertab'               " tab completion
 " would like to switch to this at some point if possible (need to check FAQ to
 " work with vim-visual-multi)
@@ -362,6 +362,3 @@ nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
 " easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
 nmap <leader>s <Plug>(easymotion-overwin-f) 
-
-" vimade fade with TMUX
-let g:vimade.enablefocusfading = 1
