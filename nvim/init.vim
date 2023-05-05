@@ -148,6 +148,7 @@ Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python
 Plug 'sjl/gundo.vim'                   " show history tree with <F5>
 " Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
 Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
+Plug 'ellisonleao/glow.nvim'
 
 " Plugin list end
 call plug#end()
@@ -362,3 +363,8 @@ nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
 " easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
 nmap <leader>s <Plug>(easymotion-overwin-f) 
+
+" glow setup
+lua << EOF
+require('glow').setup()
+EOF
