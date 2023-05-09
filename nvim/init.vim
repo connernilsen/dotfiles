@@ -26,14 +26,14 @@ set number " show line numbers
 aug numbertoggle
   au!
   " show absolute line number and relative line numbers for currently active window
-  au BufWinEnter,FocusGained,InsertLeave,WinEnter * 
-        \ if &number && mode() != 'i' 
-        \ | set rnu 
+  au BufWinEnter,FocusGained,InsertLeave,WinEnter *
+        \ if &number && mode() != 'i'
+        \ | set rnu
         \ | endif
   " show absolute line number for inactive windows
-  au BufWinLeave,FocusLost,InsertEnter,WinLeave * 
-        \ if &number 
-        \ | set nornu 
+  au BufWinLeave,FocusLost,InsertEnter,WinLeave *
+        \ if &number
+        \ | set nornu
         \ | endif
 aug END
 set t_Co=256
@@ -69,7 +69,7 @@ if !isdirectory(udir)
 endif
 set undofile " save and restore undo history when editing files
 " set directory for storing and loading undofiles
-set undodir=~/.config/nvim/undo-dir 
+set undodir=~/.config/nvim/undo-dir
 " create session directory (NOTE: this doesn't populate anything there)
 let sdir=confdir.'session-dir/'
 if !isdirectory(sdir)
@@ -100,10 +100,10 @@ let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   echo "*********Installing vim-plug*********"
   " convert back to one line if this fails
-  execute 
+  execute
         \ '!curl -fLo '
         \ .data_dir
-        \ .'/autoload/plug.vim --create-dirs 
+        \ .'/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -130,10 +130,9 @@ Plug 'junegunn/vim-peekaboo'           " check registers when ctrl + r
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'                " fuzzy finder
 Plug 'dense-analysis/ale'              " async lint engine
-Plug 'maximbaz/lightline-ale'          " lightline support for ALE 
+Plug 'maximbaz/lightline-ale'          " lightline support for ALE
 Plug 'google/vim-searchindex'          " count number of searches returned from / or ?
 Plug 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
-Plug 'pseewald/vim-anyfold'            " auto populate folds for many languages
 Plug 'konfekt/fastfold'                " only update fold information on fold operations
 Plug 'tpope/vim-surround'              " plugin for working with text objects
 Plug 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
@@ -148,34 +147,23 @@ Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python
 Plug 'sjl/gundo.vim'                   " show history tree with <F5>
 " Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
 Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
-Plug 'ellisonleao/glow.nvim'
+Plug 'ellisonleao/glow.nvim'           " markdown visualizer for nvim
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
+Plug 'nvim-treesitter/playground'      " visualizer for AST
+Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
+
 
 " Plugin list end
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
 
+let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
-
-let g:LargeFile = 1000000 " file is large if size greater than 1MB
-aug anyfold
-  au!
-  au Filetype * AnyFoldActivate " activate folding for all filetypes
-aug end
-" disable anyfold for large files
-au BufReadPre,BufRead * 
-            \ let f=getfsize(expand('<afile>')) 
-            \ | if f > g:LargeFile || f == -2 
-            \ | call LargeFile() 
-            \ | endif
-function LargeFile()
-  aug anyfold
-    " remove AnyFoldActivate
-    au! 
-    au Filetype <filetype> setlocal foldmethod=indent " fall back to indent folding
-  aug END
-endfunction
+let g:ale_fixers = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ }
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
@@ -186,9 +174,6 @@ aug coloring
   au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
   au BufWinEnter,WinEnter * let g:indent_guides_size=&shiftwidth
 aug END
-
-" format on save
-let g:ale_fix_on_save = 1
 
 " use enhanced coloring if possible
 if (has('termguicolors'))
@@ -220,7 +205,7 @@ let g:lightline.component_type = {
       \ }
 
 let g:lightline.active = {
-      \ 'right': [ [ 'linter_checking', 'linter_errors', 
+      \ 'right': [ [ 'linter_checking', 'linter_errors',
       \             'linter_warnings', 'linter_infos', 'linter_ok' ],
       \            [ 'lineinfo' ],
       \            [ 'percent' ],
@@ -268,10 +253,10 @@ let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
 
 " ocaml settings (if opam and merlin installed)
-if system('opam --version') && 
+if system('opam --version') &&
             \ system('opam list --installed --short --safe --color=never --check merlin')
-  let g:opam_share_dir = 
-              \ substitute(system('opam var share'),'[\r\n]*$','','''') . 
+  let g:opam_share_dir =
+              \ substitute(system('opam var share'),'[\r\n]*$','','''') .
               \ '/merlin/vim'
   set rtp+=g:opam_share_dir
   set rtp^=g:opam_share_dir.'/ocp-indent/vim'
@@ -310,7 +295,7 @@ function! <SID>TermExec(cmd)
 endfunction
 
 augroup Term
-    au CmdlineLeave,WinEnter,BufWinEnter * 
+    au CmdlineLeave,WinEnter,BufWinEnter *
                 \ call timer_start(0, function('s:TermEnter'), {})
     au TermEnter term://* setlocal nonu nornu
     au TermLeave term://* setlocal nu rnu
@@ -340,10 +325,10 @@ tnoremap <expr> <C-\><C-R>    '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 function ALELSPMappings()
     let l:lsp_found=0
-    for l:linter in ale#linter#Get(&filetype) 
-                \ | if !empty(l:linter.lsp) 
-                \ | let l:lsp_found=1 
-                \ | endif 
+    for l:linter in ale#linter#Get(&filetype)
+                \ | if !empty(l:linter.lsp)
+                \ | let l:lsp_found=1
+                \ | endif
                 \ | endfor
     if (l:lsp_found)
         nnoremap <buffer> gd :ALEGoToDefinition<CR>
@@ -362,9 +347,32 @@ nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
 
 " easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
-nmap <leader>s <Plug>(easymotion-overwin-f) 
+nmap <leader>s <Plug>(easymotion-overwin-f)
 
 " glow setup
 lua << EOF
 require('glow').setup()
 EOF
+
+let g:vimade = {}
+let g:vimade.fadelevel = 0.5
+let g:vimade.rowbufsize = 0
+let g:vimade.colbufsize = 1
+let g:vimade.enabletreesitter = 1
+let g:vimade.enablefocusfading = 1
+
+" treesitter setup
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = true,
+  },
+}
+EOF
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
