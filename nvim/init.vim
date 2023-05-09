@@ -230,8 +230,11 @@ nmap gP <plug>(YoinkPaste_gP)
 nmap <c-n> <plug>(YoinkPostPasteSwapBack)
 nmap <c-p> <plug>(YoinkPostPasteSwapForward)
 
+" setup easymotion
+let g:EasyMotion_do_mapping = 0 " disable defaults
+nnoremap <leader>s <Plug>(easymotion-overwin-w)
+
 " workspace settings
-nnoremap <leader><leader>s :ToggleWorkspace<CR> " toggle tracking workspace
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
 let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
