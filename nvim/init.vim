@@ -232,7 +232,7 @@ nmap <c-p> <plug>(YoinkPostPasteSwapForward)
 
 " setup easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
-nnoremap <leader>s <Plug>(easymotion-overwin-w)
+nnoremap <leader>s <Plug>(easymotion-bd-W)
 
 " workspace settings
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
