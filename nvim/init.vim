@@ -59,7 +59,7 @@ set autoindent " automatically set indent of new line
 set smartindent " clever autoindenting
 set smartcase " ignore case when a capital letter appears
 set ignorecase " mostly ignore case when searching (see smartcase)
-set spell " highlight spelling mistakes
+" set spell " highlight spelling mistakes
 set laststatus=2 " always show status line
 set visualbell " use visual bell instead of beeping
 " create undo directory
@@ -151,6 +151,8 @@ Plug 'ellisonleao/glow.nvim'           " markdown visualizer for nvim
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
 Plug 'nvim-treesitter/playground'      " visualizer for AST
 Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
+Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
+Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
 
 
 " Plugin list end
@@ -172,7 +174,7 @@ aug coloring
   au!
   " set color scheme and indent guides
   au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
-  au BufWinEnter,WinEnter * let g:indent_guides_size=&shiftwidth
+  au BufWinEnter,WinEnter * let b:indent_guides_size=&shiftwidth
 aug END
 
 " use enhanced coloring if possible
@@ -220,24 +222,6 @@ set omnifunc=ale#completion#OmniFunc
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-
-" turn on rainbow parentheses by default
-aug rainbowparens
-  au!
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
-  au Syntax * RainbowParenthesesLoadChevrons
-aug END
-
-" peekaboo larger window
-if winwidth(0) < 60
-  let g:peekaboo_window='vert bo 30new'
-else
-  let g:peekaboo_window='vert bo '.float2nr(ceil(winwidth(0)/3)).'new'
-endif
-
 " yoink settings
 nmap p <plug>(YoinkPaste_p)
 nmap P <plug>(YoinkPaste_P)
@@ -251,75 +235,6 @@ nnoremap <leader><leader>s :ToggleWorkspace<CR> " toggle tracking workspace
 let g:workspace_session_disable_on_args=1 " when starting with a specific file, don't open workspace
 let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
-
-" ocaml settings (if opam and merlin installed)
-if system('opam --version') &&
-            \ system('opam list --installed --short --safe --color=never --check merlin')
-  let g:opam_share_dir =
-              \ substitute(system('opam var share'),'[\r\n]*$','','''') .
-              \ '/merlin/vim'
-  set rtp+=g:opam_share_dir
-  set rtp^=g:opam_share_dir.'/ocp-indent/vim'
-endif
-
-" slime setup <C-c><C-c> to send over selection
-" find tmux pane with <C-b>q and set with `:.<pane_num>`
-" Note: can reset job id if channel number changes with <C-c>v
-let g:slime_target = 'tmux'
-let g:slime_python_ipython = 1
-let g:slime_cell_delimiter = '^\\s*##'
-let g:slime_bracketed_paste = 1
-let g:slime_no_mappings = 1
-nmap <c-c>v <Plug>SlimeConfig
-nmap <c-c><c-c> <Plug>SlimeCellsSendAndGoToNext
-" these won't work on mac
-nmap <c-c><c-Down> <Plug>SlimeCellsNext
-nmap <c-c><c-Up> <Plug>SlimeCellsPrev
-
-" terminal settings for vim-like operation
-
-" :T and :VT open terminals in new buffer instead of current
-command! T split | terminal
-command! VT vsplit | terminal
-
-function! s:TermEnter(_)
-    if getbufvar(bufnr(), 'term_insert', 0)
-        startinsert
-        call setbufvar(bufnr(), 'term_insert', 0)
-    endif
-endfunction
-
-function! <SID>TermExec(cmd)
-    let b:term_insert = 1
-    execute a:cmd
-endfunction
-
-augroup Term
-    au CmdlineLeave,WinEnter,BufWinEnter *
-                \ call timer_start(0, function('s:TermEnter'), {})
-    au TermEnter term://* setlocal nonu nornu
-    au TermLeave term://* setlocal nu rnu
-augroup end
-
-" map vim-like motions for terminal
-tnoremap <silent> <C-W>.      <C-W>
-tnoremap <silent> <C-W><C-.>  <C-W>
-tnoremap <silent> <C-W><C-\>  <C-\>
-tnoremap <silent> <C-W>N      <C-\><C-N>
-tnoremap <silent> <C-W>:      <C-\><C-N>:call <SID>TermExec('call feedkeys(':')')<CR>
-tnoremap <silent> <C-W><C-W>  <cmd>call <SID>TermExec('wincmd w')<CR>
-tnoremap <silent> <C-W>h      <cmd>call <SID>TermExec('wincmd h')<CR>
-tnoremap <silent> <C-W>j      <cmd>call <SID>TermExec('wincmd j')<CR>
-tnoremap <silent> <C-W>k      <cmd>call <SID>TermExec('wincmd k')<CR>
-tnoremap <silent> <C-W>l      <cmd>call <SID>TermExec('wincmd l')<CR>
-tnoremap <silent> <C-W>=      <cmd>call <SID>TermExec('wincmd =')<CR>
-tnoremap <silent> <C-W><C-H>  <cmd>call <SID>TermExec('wincmd h')<CR>
-tnoremap <silent> <C-W><C-J>  <cmd>call <SID>TermExec('wincmd j')<CR>
-tnoremap <silent> <C-W><C-K>  <cmd>call <SID>TermExec('wincmd k')<CR>
-tnoremap <silent> <C-W><C-L>  <cmd>call <SID>TermExec('wincmd l')<CR>
-tnoremap <silent> <C-W>gt     <cmd>call <SID>TermExec('tabn')<CR>
-tnoremap <silent> <C-W>gT     <cmd>call <SID>TermExec('tabp')<CR>
-tnoremap <expr> <C-\><C-R>    '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " map <g><d> to :ALEGoToDef
 
@@ -345,10 +260,6 @@ aug END
 " gundo
 nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
 
-" easymotion
-let g:EasyMotion_do_mapping = 0 " disable defaults
-nmap <leader>s <Plug>(easymotion-overwin-f)
-
 " glow setup
 lua << EOF
 require('glow').setup()
@@ -364,14 +275,35 @@ let g:vimade.enablefocusfading = 1
 " treesitter setup
 lua << EOF
 require'nvim-treesitter.configs'.setup {
+  -- languages that should be auto-installed
+  ensure_installed = {
+    'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'ocaml',
+    'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown', 'markdown_inline',
+    'yaml', 'query', 'starlark'
+  },
   highlight = {
     enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = true,
+    additional_vim_regex_highlighting = false,
   },
+  rainbow = {
+    enable = true,
+    query = 'rainbow-parens',
+    strategy = require('ts-rainbow').strategy.global,
+  },
+  context_commentstring = {
+    enable = true,
+  },
+}
+require'treesitter-context'.setup{
+  enable = true,
+  max_lines = 0,
+  min_window_height = 0,
+  line_numbers = true,
+  multiline_threshold = 20,
+  trim_scope = 'outer',
+  mode = 'cursor',
+  separator = '#',
+  zindex = 20,
 }
 EOF
 set foldmethod=expr
