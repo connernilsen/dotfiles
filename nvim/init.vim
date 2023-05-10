@@ -153,7 +153,7 @@ Plug 'nvim-treesitter/playground'      " visualizer for AST
 Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
 Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
 Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
-
+Plug 'drybalka/tree-climber.nvim'      " functionality for navigating around the syntax tree
 
 " Plugin list end
 call plug#end()
@@ -332,6 +332,22 @@ require'treesitter-context'.setup{
   separator = '#',
   zindex = 20,
 }
+local keyopts = { noremap = true, silent = true }
+local movement_options = { highlight = true, skip_comments = true, timeout = 250 }
+vim.keymap.set({'n', 'v', 'o'}, 'K', function()
+    require('tree-climber').goto_parent(movement_options)
+  end, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, 'J', function()
+    require('tree-climber').goto_child(movement_options)
+  end, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, 'L', function()
+    require('tree-climber').goto_next(movement_options)
+  end, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, 'H', function()
+    require('tree-climber').goto_prev(movement_options)
+  end, keyopts)
+vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
+vim.keymap.set('n', '<c-h>', require('tree-climber').highlight_node, keyopts)
 EOF
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
