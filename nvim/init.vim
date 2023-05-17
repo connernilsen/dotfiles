@@ -154,6 +154,7 @@ Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within mod
 Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
 Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
 Plug 'drybalka/tree-climber.nvim'      " functionality for navigating around the syntax tree
+Plug 'christoomey/vim-tmux-navigator'  " navigate between tmux and vim seamlessly
 
 " Plugin list end
 call plug#end()
@@ -219,16 +220,16 @@ let g:lightline.active = {
 " completion engine with ALE
 set omnifunc=ale#completion#OmniFunc
 " go to next errors
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>j <Plug>(ale_next_wrap)
 
 " yoink settings
 nmap p <plug>(YoinkPaste_p)
 nmap P <plug>(YoinkPaste_P)
 nmap gp <plug>(YoinkPaste_gp)
 nmap gP <plug>(YoinkPaste_gP)
-nmap <c-n> <plug>(YoinkPostPasteSwapBack)
-nmap <c-p> <plug>(YoinkPostPasteSwapForward)
+nmap <C-n> <plug>(YoinkPostPasteSwapBack)
+nmap <C-p> <plug>(YoinkPostPasteSwapForward)
 
 " setup easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
@@ -257,11 +258,11 @@ let g:slime_python_ipython = 1
 let g:slime_cell_delimiter = '^\\s*##'
 let g:slime_bracketed_paste = 1
 let g:slime_no_mappings = 1
-nmap <c-c>v <Plug>SlimeConfig
-nmap <c-c><c-c> <Plug>SlimeCellsSendAndGoToNext
+nmap <C-c>v <Plug>SlimeConfig
+nmap <C-c><C-c> <Plug>SlimeCellsSendAndGoToNext
 " these won't work on mac
-nmap <c-c><c-Down> <Plug>SlimeCellsNext
-nmap <c-c><c-Up> <Plug>SlimeCellsPrev
+nmap <C-c><c-Down> <Plug>SlimeCellsNext
+nmap <C-c><c-Up> <Plug>SlimeCellsPrev
 
 " map <g><d> to :ALEGoToDef
 
@@ -347,7 +348,6 @@ vim.keymap.set({'n', 'v', 'o'}, 'H', function()
     require('tree-climber').goto_prev(movement_options)
   end, keyopts)
 vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
-vim.keymap.set('n', '<c-h>', require('tree-climber').highlight_node, keyopts)
 EOF
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()

@@ -16,10 +16,11 @@ This repository contains the set of dotfiles and configurations I would like sha
   - `htop`
   - `ripgrep`
   - `tmux`
+  - `ChrisJohnsen/tmux-MacOSX-pasteboard` (if on mac)
   - `charmbracelet/glow`
   - Packages that should be auto installed by nvim
-    - `fzf` 
-    - `vim-plug` 
+    - `fzf`
+    - `vim-plug`
 5. Install [TPM](https://github.com/tmux-plugins/tpm)
 6. Set the following options in .bashrc/.zshrc/...
 ```
