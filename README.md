@@ -2,7 +2,7 @@
 
 This repository contains the set of dotfiles and configurations I would like shared between the computers and environments I commonly work in.
 
-> Note: the vim config is no longer maintained. Some plugins may not behave correctly or cause vim to crash.
+> Note: the vim config is no longer maintained (but not the nvim config). Some plugins may not behave correctly or cause vim to crash.
 
 ## Setup
 
