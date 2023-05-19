@@ -16,8 +16,9 @@ This repository contains the set of dotfiles and configurations I would like sha
   - `htop`
   - `ripgrep`
   - `tmux`
-  - `ChrisJohnsen/tmux-MacOSX-pasteboard` (if on mac)
+  - `ajeetdsouza/zoxide`
   - `charmbracelet/glow`
+  - `reattach-to-user-namespace`
   - Packages that should be auto installed by nvim
     - `fzf`
     - `vim-plug`

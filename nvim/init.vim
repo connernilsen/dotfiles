@@ -300,6 +300,10 @@ let g:vimade.colbufsize = 1
 let g:vimade.enabletreesitter = 1
 let g:vimade.enablefocusfading = 1
 
+" rebind join lines to <Leader>J and join comments properly
+vnoremap <silent> <buffer> <M-j> gfJ
+nnoremap <silent> <buffer> <M-j> J
+
 " treesitter setup
 lua << EOF
 require'nvim-treesitter.configs'.setup {
