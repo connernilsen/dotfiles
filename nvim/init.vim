@@ -95,6 +95,10 @@ else
 endif
 set mouse=  " clicking won't move the cursor, and you can copy directly off the screen
 
+if $OVERRIDE_PYBINARY != ''
+  let g:python3_host_prog = $OVERRIDE_PYBINARY
+endif
+
 " download and install vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -113,7 +117,8 @@ call plug#begin('~/.config/nvim/bundle')
 
 " Plugin list begin
 
-Plug 'dracula/vim',{'name':'dracula'}  " theme
+" Plug 'dracula/vim',{'name':'dracula'}  " theme
+Plug 'navarasu/onedark.nvim'     " theme
 Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
 Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
@@ -185,10 +190,13 @@ endif
 
 " set color scheme
 set background=dark
-colorscheme dracula
+let g:onedark_config = {
+    \ 'style': 'deep'
+    \ }
+colorscheme onedark
 
 let g:lightline = {
-      \ 'colorscheme': 'dracula',
+      \ 'colorscheme': 'selenized_black',
       \ }
 
 let g:lightline.component_expand = {

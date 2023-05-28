@@ -19,6 +19,7 @@ This repository contains the set of dotfiles and configurations I would like sha
   - `ajeetdsouza/zoxide`
   - `charmbracelet/glow`
   - `reattach-to-user-namespace`
+  - `pynvim` (for `--user`)
   - Packages that should be auto installed by nvim
     - `fzf`
     - `vim-plug`
