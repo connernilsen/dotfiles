@@ -6,6 +6,7 @@ set nocompatible " don't use vi compatibility
 filetype plugin indent on " turn on indentation and plugins for recognized file types
 
 let mapleader=' ' " sets <leader> to ' '
+nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <BAR> set hls <CR> " don't jump when highlighting
 
 " tab settings
 set shiftwidth=4 " number of spaces used in an auto indent step
@@ -308,7 +309,7 @@ let g:vimade.colbufsize = 1
 let g:vimade.enabletreesitter = 1
 let g:vimade.enablefocusfading = 1
 
-" rebind join lines to <Leader>J and join comments properly
+" rebind join lines to alt-j and join comments properly
 vnoremap <silent> <buffer> <M-j> gfJ
 nnoremap <silent> <buffer> <M-j> J
 
