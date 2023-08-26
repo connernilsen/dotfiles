@@ -40,3 +40,10 @@ export EXTERNAL_TERM=${EXTERNAL_TERM:-$TERM} # make an extra case in .tmux.conf 
     - `ocamlformat`
     - `ocaml-lsp-server`
     - `utop`
+
+8. Source Bash scripts in .bashrc/.zshrc
+```
+if [ -f dotfiles/shell/<file> ]; then
+  source dotfiles/shell/<file>
+fi
+```
