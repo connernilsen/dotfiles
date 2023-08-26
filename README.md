@@ -8,17 +8,15 @@ This repository contains the set of dotfiles and configurations I would like sha
 
 1. Install/Compile neovim
 2. Symlink files:
-  - `ln -s dotfiles/tmux.conf .tmux.conf`
-  - `ln -s dotfiles/nvim .config/nvim`
-  - `ln -s dotfiles/vim .vim` (if using vim)
+  - `ln -s dotfiles/tmux.conf .tmux.conf` (from `~`)
+  - `ln -s ../dotfiles/nvim nvim` (from `.config/`)
 3. Run `:PlugInstall` in nvim
 4. Install the following packages:
   - `htop`
   - `ripgrep`
   - `tmux`
   - `ajeetdsouza/zoxide`
-  - `charmbracelet/glow`
-  - `reattach-to-user-namespace`
+  - `reattach-to-user-namespace` (if on Mac)
   - `pynvim` (for `--user`)
   - Packages that should be auto installed by nvim
     - `fzf`
@@ -28,7 +26,7 @@ This repository contains the set of dotfiles and configurations I would like sha
 ```
 export EDITOR=nvim
 export CLICOLOR=1
-export TERM="xterm-256color"
+export EXTERNAL_TERM=$TERM # make an extra case in .tmux.conf if colors are weird in nvim
 ```
 7. Install language helpers:
   - python
