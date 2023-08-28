@@ -76,7 +76,7 @@ let sdir=confdir.'session-dir/'
 if !isdirectory(sdir)
   call mkdir(sdir, '', 0700)
 endif
-let g:workspace_session_directory=sdir " create a new workspace with \s
+let g:workspace_session_directory=sdir " create a new workspace with :ToggleWorkspace
 set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax enable " enable syntax highlighting
@@ -364,3 +364,10 @@ vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
 EOF
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
+
+" language autodetection
+aug language_autodetection
+  au!
+  " set filetype if not already set
+  au BufNewFile,BufRead *.bxl setfiletype starlark
+aug END
