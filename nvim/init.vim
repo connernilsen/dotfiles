@@ -291,6 +291,7 @@ function ALELSPMappings()
     endif
 endfunction
 aug ALELSPMap
+    au!
     au BufRead,FileType * call ALELSPMappings()
 aug END
 
