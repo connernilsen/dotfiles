@@ -26,7 +26,7 @@ This repository contains the set of dotfiles and configurations I would like sha
 ```
 export EDITOR=nvim
 export CLICOLOR=1
-export EXTERNAL_TERM=$TERM # make an extra case in .tmux.conf if colors are weird in nvim
+export EXTERNAL_TERM=${EXTERNAL_TERM:-TERM} # make an extra case in .tmux.conf if colors are weird in nvim
 ```
 7. Install language helpers:
   - python
