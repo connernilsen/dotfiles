@@ -153,7 +153,6 @@ Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python
 Plug 'sjl/gundo.vim'                   " show history tree with <F5>
 " Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
 Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
-Plug 'ellisonleao/glow.nvim'           " markdown visualizer for nvim
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
 Plug 'nvim-treesitter/playground'      " visualizer for AST
 Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
@@ -297,11 +296,6 @@ aug END
 
 " gundo
 nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
-
-" glow setup
-lua << EOF
-require('glow').setup()
-EOF
 
 let g:vimade = {}
 let g:vimade.fadelevel = 0.5
