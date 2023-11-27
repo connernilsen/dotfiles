@@ -6,7 +6,10 @@ set nocompatible " don't use vi compatibility
 filetype plugin indent on " turn on indentation and plugins for recognized file types
 
 let mapleader=' ' " sets <leader> to ' '
-nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <BAR> set hls <CR> " don't jump when highlighting
+" don't auto jump when highlighting
+nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <BAR> set hls <CR>
+" highlight visual selection after hitting enter
+xnoremap <silent> <cr> "*y:silent! let searchTerm = '\V'.substitute(escape(@*, '\/'), "\n", '\\n', "g") <bar> let @/ = searchTerm <bar> echo '/'.@/ <bar> call histadd("search", searchTerm) <bar> set hls<cr>
 
 " tab settings
 set shiftwidth=4 " number of spaces used in an auto indent step
@@ -15,8 +18,6 @@ aug filetypes
     " clear all commands in this aug and recreate (otherwise they will be
     " duplicated)
     au!
-    " files with the pattern TARGETS are python files
-    " au BufNewFile,BufRead TARGETS set filetype=python
 aug END
 set expandtab tabstop=4
 " NOTE: flip tabs/spaces with :retab
@@ -24,10 +25,10 @@ set expandtab tabstop=4
 
 " visual settings
 set number " show line numbers
-aug numbertoggle
+aug file_settings
   au!
   " show absolute line number and relative line numbers for currently active window
-  au BufWinEnter,FocusGained,InsertLeave,WinEnter *
+  au BufWinEnter,FocusGained,InsertLeave,WinEnter,WinScrolled *
         \ if &number && mode() != 'i'
         \ | set rnu
         \ | endif
@@ -36,6 +37,10 @@ aug numbertoggle
         \ if &number
         \ | set nornu
         \ | endif
+  " set color scheme and indent guides
+  au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
+  au BufWinEnter,WinEnter * let b:indent_guides_size=&shiftwidth
+  au BufEnter * set foldmethod=expr
 aug END
 set t_Co=256
 set cursorline " light highlight for line showing cursor position
@@ -189,12 +194,6 @@ let g:ale_fixers = {
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
-aug coloring
-  au!
-  " set color scheme and indent guides
-  au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
-  au BufWinEnter,WinEnter * let b:indent_guides_size=&shiftwidth
-aug END
 
 " use enhanced coloring if possible
 if (has('termguicolors'))
@@ -378,4 +377,6 @@ aug language_autodetection
   au!
   " set filetype if not already set
   au BufNewFile,BufRead *.bxl setfiletype starlark
+  " files with the pattern TARGETS are python files
+  au BufNewFile,BufRead TARGETS setfiletype starlark
 aug END
