@@ -167,7 +167,7 @@ Plug 'mhinz/vim-signify'               " great source control info in gutter/wit
 Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
 Plug 'jpalardy/vim-slime'              " send text to other terminal
 Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
-Plug 'sjl/gundo.vim'                   " show history tree with <F5>
+Plug 'mbbill/undotree'                 " <F5> for edit history, ? for help
 " Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
 Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
@@ -306,9 +306,10 @@ aug ALELSPMap
     au BufRead,FileType * call ALELSPMappings()
 aug END
 
-" gundo
-nnoremap <F5> :GundoToggle<CR> " <F5> open gundo, useful keys: j,k,p,P,q
+" Undotree
+nnoremap <F5> :UndotreeToggle<CR>
 
+" vimade
 let g:vimade = {}
 let g:vimade.fadelevel = 0.5
 let g:vimade.rowbufsize = 0
