@@ -145,7 +145,9 @@ Plug 'preservim/vim-indent-guides'     " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 Plug 'psliwka/vim-smoothie'            " smooth scroll up/down/page/back
 Plug 'godlygeek/tabular', {'on': 'Tabularize'} " align text (:Tabularize /<regex>/[lcr]<spacing>...)
-Plug 'TaDaa/vimade'                    " dim inactive windows (config in after/plugin)
+if has('python3')
+  Plug 'TaDaa/vimade'                  " dim inactive windows (config in after/plugin)
+endif
 Plug 'ervandew/supertab'               " tab completion
 " would like to switch to this at some point if possible (need to check FAQ to
 " work with vim-visual-multi)
@@ -310,12 +312,14 @@ aug END
 nnoremap <F5> :UndotreeToggle<CR>
 
 " vimade
-let g:vimade = {}
-let g:vimade.fadelevel = 0.5
-let g:vimade.rowbufsize = 0
-let g:vimade.colbufsize = 1
-let g:vimade.enabletreesitter = 1
-let g:vimade.enablefocusfading = 1
+if has('python3')
+  let g:vimade = {}
+  let g:vimade.fadelevel = 0.5
+  let g:vimade.rowbufsize = 0
+  let g:vimade.colbufsize = 1
+  let g:vimade.enabletreesitter = 1
+  let g:vimade.enablefocusfading = 1
+endif
 
 " rebind join lines to alt-j and join comments properly
 vnoremap <silent> <buffer> <M-j> gfJ
