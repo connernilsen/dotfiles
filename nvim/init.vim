@@ -320,8 +320,9 @@ let g:vimade.enablefocusfading = 1
 vnoremap <silent> <buffer> <M-j> gfJ
 nnoremap <silent> <buffer> <M-j> J
 
-" treesitter setup
+" lua setup
 lua << EOF
+-- treesitter setup
 require'nvim-treesitter.configs'.setup {
   -- languages that should be auto-installed
   ensure_installed = {
@@ -338,10 +339,9 @@ require'nvim-treesitter.configs'.setup {
     query = 'rainbow-parens',
     strategy = require('ts-rainbow').strategy.global,
   },
-  context_commentstring = {
-    enable = true,
-  },
 }
+vim.g.skip_ts_context_commentstring_module = true
+require'ts_context_commentstring'.setup{}
 require'treesitter-context'.setup{
   enable = true,
   max_lines = 0,
@@ -353,6 +353,7 @@ require'treesitter-context'.setup{
   separator = '#',
   zindex = 20,
 }
+-- tree climber setup
 local keyopts = { noremap = true, silent = true }
 local movement_options = { highlight = true, skip_comments = true, timeout = 250 }
 vim.keymap.set({'n', 'v', 'o'}, 'K', function()
