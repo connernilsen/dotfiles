@@ -312,14 +312,12 @@ aug END
 nnoremap <F5> :UndotreeToggle<CR>
 
 " vimade
-if has('python3')
-  let g:vimade = {}
-  let g:vimade.fadelevel = 0.5
-  let g:vimade.rowbufsize = 0
-  let g:vimade.colbufsize = 1
-  let g:vimade.enabletreesitter = 1
-  let g:vimade.enablefocusfading = 1
-endif
+let g:vimade = {}
+let g:vimade.fadelevel = 0.5
+let g:vimade.rowbufsize = 0
+let g:vimade.colbufsize = 1
+let g:vimade.enabletreesitter = 1
+let g:vimade.enablefocusfading = 1
 
 " rebind join lines to alt-j and join comments properly
 vnoremap <silent> <buffer> <M-j> gfJ
