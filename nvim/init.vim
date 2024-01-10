@@ -137,14 +137,14 @@ call plug#begin('~/.config/nvim/bundle')
 " Plugin list begin
 
 " Plug 'dracula/vim',{'name':'dracula'}  " theme
-Plug 'navarasu/onedark.nvim'     " theme
+Plug 'navarasu/onedark.nvim'           " theme
 Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
 Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
 Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
 Plug 'preservim/vim-indent-guides'     " show indentation guides
 Plug 'sheerun/vim-polyglot'            " language helpers
 Plug 'psliwka/vim-smoothie'            " smooth scroll up/down/page/back
-Plug 'godlygeek/tabular'               " align text (:Tabularize /<regex>/[lcr]<spacing>...)
+Plug 'godlygeek/tabular', {'on': 'Tabularize'} " align text (:Tabularize /<regex>/[lcr]<spacing>...)
 Plug 'TaDaa/vimade'                    " dim inactive windows (config in after/plugin)
 Plug 'ervandew/supertab'               " tab completion
 " would like to switch to this at some point if possible (need to check FAQ to
@@ -156,12 +156,11 @@ Plug 'junegunn/fzf.vim'                " fuzzy finder
 Plug 'dense-analysis/ale'              " async lint engine
 Plug 'maximbaz/lightline-ale'          " lightline support for ALE
 Plug 'google/vim-searchindex'          " count number of searches returned from / or ?
-Plug 'chrisbra/NrrwRgn'                " narrow to selected region with :NW/NR
+Plug 'chrisbra/NrrwRgn', {'on': ['NW', 'NR']} " narrow to selected region with :NW/NR
 Plug 'konfekt/fastfold'                " only update fold information on fold operations
 Plug 'tpope/vim-surround'              " plugin for working with text objects
-Plug 'kien/rainbow_parentheses.vim'    " match paranetheses with their rainbow colors
-Plug 'will133/vim-dirdiff'             " diff a directory
-Plug 'Matt-A-Bennett/vim-surround-funk' " text objects for functionsasdf
+" Plug 'will133/vim-dirdiff'             " diff a directory
+Plug 'Matt-A-Bennett/vim-surround-funk' " text objects for functions
 Plug 'svermeulen/vim-yoink'            " ring buffer for yanks with :Yanks
 Plug 'mhinz/vim-signify'               " great source control info in gutter/with commands
 " Plug 'puremourning/vimspector'         " debugger built into vim
@@ -178,6 +177,7 @@ Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
 Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
 Plug 'drybalka/tree-climber.nvim'      " functionality for navigating around the syntax tree
 Plug 'christoomey/vim-tmux-navigator'  " navigate between tmux and vim seamlessly
+Plug 'kevinhwang91/nvim-bqf'           " quickfix help, run with :copen/cfile/cexpr
 
 " Plugin list end
 call plug#end()
