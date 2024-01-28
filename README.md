@@ -20,6 +20,8 @@ This repository contains the set of dotfiles and configurations I would like sha
   - `pynvim` (for `--user`)
   - Packages that should be auto installed by nvim
     - `fzf`
+      - This can be symlinked with `ln -s ~/.config/nvim/bundle/fzf/bin/fzf` from `.local/bin/`
+      - Run `.config/nvim/bundle/fzf/install` to complete installation
     - `vim-plug`
 5. Install [TPM](https://github.com/tmux-plugins/tpm)
 6. Set the following options in .bashrc/.zshrc/...
@@ -28,7 +30,15 @@ export EDITOR=nvim
 export CLICOLOR=1
 export EXTERNAL_TERM=${EXTERNAL_TERM:-$TERM} # make an extra case in .tmux.conf if colors are weird in nvim
 ```
-7. Install language helpers:
+7. Setup Pyenv
+  - Install with Homebrew
+  - Install [build dependencies](https://github.com/pyenv/pyenv/wiki#suggested-build-environment)
+  - Setup [shell support](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv)
+  - When installing a new Python version, the following will likely need to be done:
+    - `brew unlink pkg-config`
+    - `pyenv install ...`
+    - `brew link pkg-config`
+8. Install language helpers:
   - python
     - `autoimport`
     - `pyre-check`
@@ -41,9 +51,9 @@ export EXTERNAL_TERM=${EXTERNAL_TERM:-$TERM} # make an extra case in .tmux.conf 
     - `ocaml-lsp-server`
     - `utop`
 
-8. Source Bash scripts in .bashrc/.zshrc
+9. Source Bash scripts in .bashrc/.zshrc
 ```
-if [ -f dotfiles/shell/<file> ]; then
-  source dotfiles/shell/<file>
+if [ -f "dotfiles/shell/$file" ]; then
+  source "dotfiles"/shell/$file"
 fi
 ```
