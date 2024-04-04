@@ -131,12 +131,16 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" define large file as 10mb
+let g:LargeFile = 10
+
 " set the runtime path to include vim-plug and initialize
 call plug#begin('~/.config/nvim/bundle')
 
 " Plugin list begin
 
 " Plug 'dracula/vim',{'name':'dracula'}  " theme
+Plug 'vim-scripts/LargeFile'           " disable functionality on large files
 Plug 'navarasu/onedark.nvim'           " theme
 Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
 Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s

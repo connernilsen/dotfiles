@@ -1,3 +1,5 @@
+let b:slime_cell_delimiter = '^\\s*##'
+
 if !exists("g:slime_dispatch_ipython_pause")
   let g:slime_dispatch_ipython_pause = 100
 end
