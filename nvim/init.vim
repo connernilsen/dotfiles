@@ -24,6 +24,10 @@ set expandtab tabstop=4
 
 
 " visual settings
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 set number " show line numbers
 aug file_settings
   au!
@@ -84,7 +88,7 @@ endif
 let g:workspace_session_directory=sdir " create a new workspace with :ToggleWorkspace
 set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
-syntax enable " enable syntax highlighting
+syntax on " enable syntax highlighting
 set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
