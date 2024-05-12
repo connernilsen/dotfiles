@@ -93,7 +93,7 @@ set splitbelow " split new windows on bottom
 set splitright " split new windows to the right
 set backspace=2 " backspace twice when editing eol/sol
 set foldlevel=99 " open all folds when entering file
-set colorcolumn=80 " set line length marker
+set colorcolumn=88 " set line length marker
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == 'Darwin\n'
