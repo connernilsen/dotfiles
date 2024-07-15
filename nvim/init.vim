@@ -337,9 +337,9 @@ lua << EOF
 require'nvim-treesitter.configs'.setup {
   -- languages that should be auto-installed
   ensure_installed = {
-    'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'ocaml',
-    'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown', 'markdown_inline',
-    'yaml', 'query', 'starlark'
+    'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'vimdoc',
+    'ocaml', 'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown',
+    'markdown_inline', 'yaml', 'query', 'starlark'
   },
   highlight = {
     enable = true,
