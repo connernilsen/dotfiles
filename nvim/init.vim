@@ -264,6 +264,10 @@ let g:onedark_config = {
     \ }
 colorscheme onedark
 
+let g:lightline = {
+      \ 'colorscheme': 'selenized_black',
+      \ }
+
 let g:lightline.active = {
       \ 'right': [ [ 'lineinfo' ],
       \            [ 'percent' ],
@@ -383,9 +387,10 @@ vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
 
 -- lsp setup
 require("mason").setup()
-vim.diagnostic.config({ 
+vim.diagnostic.config({
   virtual_lines = true,
   severity_sort = true,
+  float = false,
   text = {
     [vim.diagnostic.severity.ERROR] = "",
     [vim.diagnostic.severity.WARN] = "",
@@ -407,9 +412,13 @@ vim.diagnostic.config({
   },
 })
 vim.opt["signcolumn"] = "yes"
-
-vim.keymap.set("n", "gq", vim.diagnostic.setqflist)
-
+vim.keymap.set("n", "gq", vim.diagnostic.setqflist, keyopts)
+vim.keymap.set("n", "<leader>j", function()
+  vim.diagnostic.goto_next({ count = 1, float = false })
+end, keyopts)
+vim.keymap.set("n", "<leader>k", function()
+  vim.diagnostic.goto_next({ count = -1, float = false })
+end, keyopts)
 
 vim.lsp.config['pyrefly'] = {
   cmd = { 'pyrefly', 'lsp' },
