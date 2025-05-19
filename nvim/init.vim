@@ -246,6 +246,8 @@ Plug 'mason-org/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 " show lsp status
 Plug 'j-hui/fidget.nvim'
+" linter framework for nvim
+Plug 'mfussenegger/nvim-lint'
 
 " Plugin list end
 call plug#end()
@@ -442,8 +444,22 @@ vim.lsp.enable("pyrefly")
 require("fidget").setup {
     -- render_limit = 3,
 }
+
+-- setup linting
+require('lint').linters_by_ft = {
+  yaml = { "yamllint" }
+}
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  callback = function()
+
+    -- try_lint without arguments runs the linters defined in `linters_by_ft`
+    -- for the current filetype
+    require("lint").try_lint()
+  end,
+})
+
 -- TODO: learn from organization of https://github.com/rezhaTanuharja/minimalistNVIM/tree/main
 -- TODO: setup error count in statusline
--- TODO: setup linters and formatters
+-- TODO: figure out how to wire formatters in
 EOF
 
