@@ -156,15 +156,15 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'} " align text (:Tabularize /<regex
 if has('python3')
   Plug 'TaDaa/vimade'                  " dim inactive windows (config in after/plugin)
 endif
-Plug 'ervandew/supertab'               " tab completion
+" Plug 'ervandew/supertab'               " tab completion
 " would like to switch to this at some point if possible (need to check FAQ to
 " work with vim-visual-multi)
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " fuzzy completion
 Plug 'junegunn/vim-peekaboo'           " check registers when ctrl + r
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'                " fuzzy finder
-Plug 'dense-analysis/ale'              " async lint engine
-Plug 'maximbaz/lightline-ale'          " lightline support for ALE
+" Plug 'dense-analysis/ale'              " async lint engine
+" Plug 'maximbaz/lightline-ale'          " lightline support for ALE
 Plug 'google/vim-searchindex'          " count number of searches returned from / or ?
 Plug 'chrisbra/NrrwRgn', {'on': ['NW', 'NR']} " narrow to selected region with :NW/NR
 Plug 'konfekt/fastfold'                " only update fold information on fold operations
@@ -183,23 +183,26 @@ Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <le
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
 Plug 'nvim-treesitter/playground'      " visualizer for AST
 Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
-Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
+" Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
 Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
 Plug 'drybalka/tree-climber.nvim'      " functionality for navigating around the syntax tree
 Plug 'christoomey/vim-tmux-navigator'  " navigate between tmux and vim seamlessly
 Plug 'kevinhwang91/nvim-bqf'           " quickfix help, run with :copen/cfile/cexpr
+
+Plug 'mason-org/mason.nvim'
+Plug 'neovim/nvim-lspconfig'
 
 " Plugin list end
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
 
-let g:ale_fix_on_save = 1  " run :ALEFix to format
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_fixers = {
-      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \ }
+" let g:ale_fix_on_save = 1
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 0
+" let g:ale_fixers = {
+"       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+"       \ }
 
 " turn on indent guides
 let g:indent_guides_enable_on_vim_startup=1
@@ -221,13 +224,13 @@ let g:lightline = {
       \ 'colorscheme': 'selenized_black',
       \ }
 
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
+" let g:lightline.component_expand = {
+"       \  'linter_checking': 'lightline#ale#checking',
+"       \  'linter_infos': 'lightline#ale#infos',
+"       \  'linter_warnings': 'lightline#ale#warnings',
+"       \  'linter_errors': 'lightline#ale#errors',
+"       \  'linter_ok': 'lightline#ale#ok',
+"       \ }
 
 let g:lightline.component_type = {
       \  'linter_checking': 'right',
@@ -247,11 +250,11 @@ let g:lightline.active = {
       \            [ 'readonly', 'filename', 'modified' ], ],
       \ }
 
-" completion engine with ALE
-set omnifunc=ale#completion#OmniFunc
-" go to next errors
-nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
-nmap <silent> <Leader>j <Plug>(ale_next_wrap)
+" " completion engine with ALE
+" set omnifunc=ale#completion#OmniFunc
+" " go to next errors
+" nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+" nmap <silent> <Leader>j <Plug>(ale_next_wrap)
 
 " yoink settings
 nmap p <plug>(YoinkPaste_p)
@@ -296,25 +299,25 @@ nmap <C-c><c-Up> <Plug>SlimeCellsPrev
 
 " map <g><d> to :ALEGoToDef
 
-function ALELSPMappings()
-    let l:lsp_found=0
-    for l:linter in ale#linter#Get(&filetype)
-                \ | if !empty(l:linter.lsp)
-                \ | let l:lsp_found=1
-                \ | endif
-                \ | endfor
-    if (l:lsp_found)
-        nnoremap <buffer> gd :ALEGoToDefinition<CR>
-        nnoremap <buffer> <leader>gd :ALEGoToDefinition -split<CR>
-        nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>
-        nnoremap <buffer> gr :ALEFindReferences<CR>
-        nnoremap <buffer> gR :ALERepeatSelection<CR>
-    endif
-endfunction
-aug ALELSPMap
-    au!
-    au BufRead,FileType * call ALELSPMappings()
-aug END
+" function ALELSPMappings()
+"     let l:lsp_found=0
+"     for l:linter in ale#linter#Get(&filetype)
+"                 \ | if !empty(l:linter.lsp)
+"                 \ | let l:lsp_found=1
+"                 \ | endif
+"                 \ | endfor
+"     if (l:lsp_found)
+"         nnoremap <buffer> gd :ALEGoToDefinition<CR>
+"         nnoremap <buffer> <leader>gd :ALEGoToDefinition -split<CR>
+"         nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>
+"         nnoremap <buffer> gr :ALEFindReferences<CR>
+"         nnoremap <buffer> gR :ALERepeatSelection<CR>
+"     endif
+" endfunction
+" aug ALELSPMap
+"     au!
+"     au BufRead,FileType * call ALELSPMappings()
+" aug END
 
 " Undotree
 nnoremap <F5> :UndotreeToggle<CR>
@@ -339,17 +342,17 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = {
     'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'vimdoc',
     'ocaml', 'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown',
-    'markdown_inline', 'yaml', 'query', 'starlark', 'rust'
+    'markdown_inline', 'yaml', 'query', 'starlark', 'rust', 'toml'
   },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
   },
-  rainbow = {
-    enable = true,
-    query = 'rainbow-parens',
-    strategy = require('ts-rainbow').strategy.global,
-  },
+  -- rainbow = {
+  --   enable = true,
+  --   query = 'rainbow-parens',
+  --   strategy = require('ts-rainbow').strategy.global,
+  -- },
 }
 vim.g.skip_ts_context_commentstring_module = true
 require'ts_context_commentstring'.setup{}
@@ -392,3 +395,36 @@ aug language_autodetection
   " files with the pattern TARGETS are starlark files
   au BufNewFile,BufRead TARGETS setfiletype starlark
 aug END
+
+lua << EOF
+require("mason").setup()
+
+vim.lsp.config['pyrefly'] = {
+  cmd = { 'pyrefly', 'lsp' },
+  filetypes = { 'python' },
+  root_markers = {
+    -- search for these files first
+    -- {
+      'pyproject.toml',
+      'pyrefly.toml',
+    -- },
+    -- -- then fall back to these if none of the above were found
+    -- {
+    --   'setup.py',
+    --   'setup.cfg',
+    --   'requirements.txt',
+    --   'Pipfile',
+    --   '.git',
+    -- }
+      'setup.py',
+      'setup.cfg',
+      'requirements.txt',
+      'Pipfile',
+      '.git',
+  },
+}
+
+vim.lsp.enable("pyrefly")
+EOF
+
+
