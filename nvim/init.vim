@@ -240,6 +240,8 @@ Plug 'kevinhwang91/nvim-bqf'
 " repository of language tools and settings repository.
 " run `:Mason` to install/configure tools
 Plug 'mason-org/mason.nvim'
+" bridg for mason and lspconfig
+Plug 'mason-org/mason-lspconfig.nvim'
 " repository of LSPs that can plug into nvim
 Plug 'neovim/nvim-lspconfig'
 " show lsp status
@@ -387,6 +389,12 @@ vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
 
 -- lsp setup
 require("mason").setup()
+require("mason-lspconfig").setup{
+  ensure_installed = {
+    "rust_analyzer",
+  }
+}
+
 vim.diagnostic.config({
   virtual_lines = true,
   severity_sort = true,
@@ -430,7 +438,6 @@ vim.lsp.config['pyrefly'] = {
 }
 
 vim.lsp.enable("pyrefly")
-vim.lsp.enable("rust_analyzer")
 
 require("fidget").setup {
     -- render_limit = 3,
