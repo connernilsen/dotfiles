@@ -194,7 +194,7 @@ call plug#end()
 
 let g:deoplete#enable_at_startup = 1
 
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 1  " run :ALEFix to format
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_fixers = {
@@ -339,7 +339,7 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = {
     'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'vimdoc',
     'ocaml', 'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown',
-    'markdown_inline', 'yaml', 'query', 'starlark'
+    'markdown_inline', 'yaml', 'query', 'starlark', 'rust'
   },
   highlight = {
     enable = true,
@@ -389,6 +389,6 @@ aug language_autodetection
   au!
   " set filetype if not already set
   au BufNewFile,BufRead *.bxl setfiletype starlark
-  " files with the pattern TARGETS are python files
+  " files with the pattern TARGETS are starlark files
   au BufNewFile,BufRead TARGETS setfiletype starlark
 aug END
