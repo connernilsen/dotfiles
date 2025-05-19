@@ -12,19 +12,19 @@ nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <BAR> set hls <CR>
 xnoremap <silent> <cr> "*y:silent! let searchTerm = '\V'.substitute(escape(@*, '\/'), "\n", '\\n', "g") <bar> let @/ = searchTerm <bar> echo '/'.@/ <bar> call histadd("search", searchTerm) <bar> set hls<cr>
 
 " tab settings
-set shiftwidth=4 " number of spaces used in an auto indent step
+set shiftwidth=2 " number of spaces used in an auto indent step
 set shiftround " << and >> round to shiftwidth
 aug filetypes
     " clear all commands in this aug and recreate (otherwise they will be
     " duplicated)
     au!
 aug END
-set expandtab tabstop=4
+set expandtab tabstop=2
 " NOTE: flip tabs/spaces with :retab
 
 
 " visual settings
-if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)' " tmux settings
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
@@ -44,9 +44,8 @@ aug file_settings
   " set color scheme and indent guides
   au VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=DarkGrey
   au BufWinEnter,WinEnter * let b:indent_guides_size=&shiftwidth
-  au BufEnter * set foldmethod=expr
 aug END
-set t_Co=256
+set t_Co=256 " full colors
 set cursorline " light highlight for line showing cursor position
 set incsearch " show current typed in stuff
 set showmatch " jump to matching bracket
@@ -61,25 +60,24 @@ endif
 set sidescrolloff=10 " number of cols to keep between cursor and left or right of buff
 set sidescroll=1 " scroll one character at a time
 set noshowmode " handled by lightline
-set list  " show hidden characters
+set list " show hidden characters denoted by lcs
 set lcs=tab:>-,trail:·,extends:>,precedes:< " markings to show for hidden characters
 
 " behavior settings
 set autoindent " automatically set indent of new line
 set smartindent " clever autoindenting
-set smartcase " ignore case when a capital letter appears
+set smartcase " ignore case in search unless a capital letter appears
 set ignorecase " mostly ignore case when searching (see smartcase)
 " set spell " highlight spelling mistakes
 set laststatus=2 " always show status line
-set visualbell " use visual bell instead of beeping
-" create undo directory
+set visualbell " use visual indicator of instead of beeping
+" create undo directory in shared dir
 let udir=confdir.'undo-dir'
 if !isdirectory(udir)
   call mkdir(udir, '', 0700)
 endif
 set undofile " save and restore undo history when editing files
-" set directory for storing and loading undofiles
-set undodir=~/.config/nvim/undo-dir
+set undodir=~/.config/nvim/undo-dir " set directory for storing and loading undofiles
 " create session directory (NOTE: this doesn't populate anything there)
 let sdir=confdir.'session-dir/'
 if !isdirectory(sdir)
@@ -97,7 +95,7 @@ set colorcolumn=88 " set line length marker
 
 " set clipboard settings (might need xclip)
 if system('uname -s') == 'Darwin\n'
-  set clipboard=unnamed "OSX
+  set clipboard=unnamed " OSX
   set clipboard+=unnamedplus
 elseif !empty($WSL_DISTRO_NAME)
   let g:clipboard = {
@@ -114,17 +112,17 @@ elseif !empty($WSL_DISTRO_NAME)
     \ }
 else
   set clipboard+=unnamedplus
-  set clipboard=unnamedplus "Linux
+  set clipboard=unnamedplus " Linux
 endif
-set mouse=  " clicking won't move the cursor, and you can copy directly off the screen
+set mouse= " clicking won't move the cursor, you can copy directly off the screen in iterm
 
+" set `export OVERRIDE_PYBINARY` in bashrc to override the interpreter nvim uses
 if $OVERRIDE_PYBINARY != ''
   let g:python3_host_prog = $OVERRIDE_PYBINARY
 endif
 
 " download and install vim-plug
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
+if empty(glob(stdpath('data') . '/site/autoload/plug.vim'))
   echo "*********Installing vim-plug*********"
   " convert back to one line if this fails
   execute
@@ -143,68 +141,114 @@ call plug#begin('~/.config/nvim/bundle')
 
 " Plugin list begin
 
-" Plug 'dracula/vim',{'name':'dracula'}  " theme
-Plug 'vim-scripts/LargeFile'           " disable functionality on large files
-Plug 'navarasu/onedark.nvim'           " theme
-Plug 'itchyny/lightline.vim'           " meta info at bottom of screen
-Plug 'thaerkh/vim-workspace'           " handle auto-resuming sessions when calling 'vim' in a dir after \s
-Plug 'tpope/vim-commentary'            " make comments using gcc or <motion>gc
-Plug 'preservim/vim-indent-guides'     " show indentation guides
-Plug 'sheerun/vim-polyglot'            " language helpers
-Plug 'psliwka/vim-smoothie'            " smooth scroll up/down/page/back
-Plug 'godlygeek/tabular', {'on': 'Tabularize'} " align text (:Tabularize /<regex>/[lcr]<spacing>...)
+" enable only simple functionality on large files
+Plug 'vim-scripts/LargeFile'
+" nvim color theme
+Plug 'navarasu/onedark.nvim'
+" plugin for handling meta-info at bottom of nvim
+Plug 'itchyny/lightline.vim'
+" automatically reopen files like vscode workspace when started.
+" <leader>s will start a new workspace or disable workspace functionality if
+" already on
+Plug 'thaerkh/vim-workspace'
+" `gcc` to (un)comment current line or `<motion|visual>gc` to comment selection
+Plug 'tpope/vim-commentary'
+" comment functionality when nested in languages
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+" show indentation guides, every indent level will have a highlight
+Plug 'preservim/vim-indent-guides'
+" language syntax highlighting
+" Plug 'sheerun/vim-polyglot'
+" smooth scrolling
+Plug 'psliwka/vim-smoothie'
+" automatically align text in selection (e.g. if you want a bunch of comments
+" across lines to be automatically aligned with each other).
+" :Tabularize /<regex>[/[l<spacing>] will left-align everything by <regex>,
+" with at minimum <spacing> space between the selections (read docs for more
+" complex stuff)
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+" dim inactive windows (config in after/plugin)
 if has('python3')
-  Plug 'TaDaa/vimade'                  " dim inactive windows (config in after/plugin)
+  Plug 'TaDaa/vimade'
 endif
-" Plug 'ervandew/supertab'               " tab completion
-" would like to switch to this at some point if possible (need to check FAQ to
-" work with vim-visual-multi)
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " fuzzy completion
-Plug 'junegunn/vim-peekaboo'           " check registers when ctrl + r
+" check registers in insert or command mode when ctrl + r
+Plug 'junegunn/vim-peekaboo'
+" make sure fzf is installed
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'                " fuzzy finder
-" Plug 'dense-analysis/ale'              " async lint engine
-" Plug 'maximbaz/lightline-ale'          " lightline support for ALE
-Plug 'google/vim-searchindex'          " count number of searches returned from / or ?
-Plug 'chrisbra/NrrwRgn', {'on': ['NW', 'NR']} " narrow to selected region with :NW/NR
-Plug 'konfekt/fastfold'                " only update fold information on fold operations
-Plug 'tpope/vim-surround'              " plugin for working with text objects
-" Plug 'will133/vim-dirdiff'             " diff a directory
+" a fuzzy finder, try `:Files`, `:Rg`, `:Buff`, ... (see docs for more)
+Plug 'junegunn/fzf.vim'
+" count number of searches returned from / or ?
+Plug 'google/vim-searchindex'
+" narrow to visual selection region in new pane with :NW/NR, which allows safe
+" operations guaranteeing you won't accidentlly modify something you don't
+" mean to.
+" changes will write to the buffer when done.
+" quit without writing to original buffer with `q!`
+Plug 'chrisbra/NrrwRgn', {'on': ['NW', 'NR']}
+" only update fold information on fold operations
+Plug 'konfekt/fastfold'
+" plugin adding more text objects and text object functionality
+Plug 'tpope/vim-surround'
+" plugin adding to vim-surround for working with functions and methods
 Plug 'Matt-A-Bennett/vim-surround-funk' " text objects for functions
-Plug 'svermeulen/vim-yoink'            " ring buffer for yanks with :Yanks
-Plug 'mhinz/vim-signify'               " great source control info in gutter/with commands
-" Plug 'puremourning/vimspector'         " debugger built into vim
-Plug 'tpope/vim-scriptease'            " vim plugin for working with vim plugins (:PP, :Scriptnames, :Messages,...)
-Plug 'jpalardy/vim-slime'              " send text to other terminal
-Plug 'klafyvel/vim-slime-cells'        " interactive cells for languages (python and ocaml by default)
-Plug 'mbbill/undotree'                 " <F5> for edit history, ? for help
-" Plug 'mg979/vim-visual-multi'          " allows for Sublime/VSCode multi-cursor behavior
-Plug 'easymotion/vim-easymotion'       " jump to any character anywhere with <leader>s
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " plugin  for syntax everything (:TSInstall <lang> to setup)
-Plug 'nvim-treesitter/playground'      " visualizer for AST
-Plug 'nvim-treesitter/nvim-treesitter-context' " show current context within module/function/...
-" Plug 'HiPhish/nvim-ts-rainbow2'        " rainbow parentheses
-Plug 'JoosepAlviste/nvim-ts-context-commentstring' " better commentstrings/language nested comments
-Plug 'drybalka/tree-climber.nvim'      " functionality for navigating around the syntax tree
-Plug 'christoomey/vim-tmux-navigator'  " navigate between tmux and vim seamlessly
-Plug 'kevinhwang91/nvim-bqf'           " quickfix help, run with :copen/cfile/cexpr
-
+" diff directories with :DirDiff <d1> <d2>
+Plug 'will133/vim-dirdiff'
+" creates a ring buffer of yanks and allows you to swap what you past with 
+" <c-n>/<c-p> to cycle through pastes.
+" view yanks with `:Yanks`
+Plug 'svermeulen/vim-yoink'
+" adds source control changes in gutter (including hg).
+" also provides nice source control functionality with `:Signify<tab>`
+Plug 'mhinz/vim-signify'
+" create persistent vim popups (:PP, :Scriptnames, :Messages, ...)
+Plug 'tpope/vim-scriptease'
+" send text to other tmux pane (e.g. if you have a python repl open and want
+" to copy a script into it).
+" also works with selections.
+" use with `<c-c><c-c>`.
+" on first run, keep socket as default and set pane to .<pane number from
+" `<c-a>q`.
+" reset cells with `:SlimeConfig`
+Plug 'jpalardy/vim-slime'
+" interactive cells for languages (i.e. iPython cells).
+" only python enabled in settings now
+Plug 'klafyvel/vim-slime-cells'
+" <F5> for edit history, ? for help
+Plug 'mbbill/undotree'
+" allows for Sublime/VSCode multi-cursor behavior, but doesn't work on mac
+" without rebinding
+" Plug 'mg979/vim-visual-multi'
+" jump to any character anywhere with <leader>s
+Plug 'easymotion/vim-easymotion'
+" plugin for syntax everything (:TSInstall <lang> to setup)
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" visualizer for your language's AST
+Plug 'nvim-treesitter/playground'
+" show current context within module/function/... at top of buffer
+Plug 'nvim-treesitter/nvim-treesitter-context'
+" functionality for navigating around the syntax tree
+Plug 'drybalka/tree-climber.nvim'
+" rainbowify parentheses
+Plug 'HiPhish/nvim-ts-rainbow2'
+" navigate between tmux and vim seamlessly (with HJKL)
+Plug 'christoomey/vim-tmux-navigator'
+" quickfix window functionality.
+" run with `:copen/cfile/cexpr`.
+" can pipe commands into `:copen` or execute with
+" `cexpr <cmd>` to get easy to walk list of items
+Plug 'kevinhwang91/nvim-bqf'
+" repository of language tools and settings repository.
+" run `:Mason` to install/configure tools
 Plug 'mason-org/mason.nvim'
+" repository of LSPs that can plug into nvim
 Plug 'neovim/nvim-lspconfig'
+" show lsp status
+Plug 'j-hui/fidget.nvim'
 
 " Plugin list end
 call plug#end()
 
-let g:deoplete#enable_at_startup = 1
-
-" let g:ale_fix_on_save = 1
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_insert_leave = 0
-" let g:ale_fixers = {
-"       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-"       \ }
-
-" turn on indent guides
+" turn on vim-indent-guides
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
 
@@ -220,49 +264,21 @@ let g:onedark_config = {
     \ }
 colorscheme onedark
 
-let g:lightline = {
-      \ 'colorscheme': 'selenized_black',
-      \ }
-
-" let g:lightline.component_expand = {
-"       \  'linter_checking': 'lightline#ale#checking',
-"       \  'linter_infos': 'lightline#ale#infos',
-"       \  'linter_warnings': 'lightline#ale#warnings',
-"       \  'linter_errors': 'lightline#ale#errors',
-"       \  'linter_ok': 'lightline#ale#ok',
-"       \ }
-
-let g:lightline.component_type = {
-      \  'linter_checking': 'right',
-      \  'linter_infos': 'right',
-      \  'linter_warnings': 'warning',
-      \  'linter_errors': 'error',
-      \  'linter_ok': 'right',
-      \ }
-
 let g:lightline.active = {
-      \ 'right': [ [ 'linter_checking', 'linter_errors',
-      \             'linter_warnings', 'linter_infos', 'linter_ok' ],
-      \            [ 'lineinfo' ],
+      \ 'right': [ [ 'lineinfo' ],
       \            [ 'percent' ],
       \            [ 'fileformat', 'filetype'], ],
       \ 'left':  [ [ 'mode', 'paste' ],
       \            [ 'readonly', 'filename', 'modified' ], ],
       \ }
 
-" " completion engine with ALE
-" set omnifunc=ale#completion#OmniFunc
-" " go to next errors
-" nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
-" nmap <silent> <Leader>j <Plug>(ale_next_wrap)
-
 " yoink settings
 nmap p <plug>(YoinkPaste_p)
 nmap P <plug>(YoinkPaste_P)
 nmap gp <plug>(YoinkPaste_gp)
 nmap gP <plug>(YoinkPaste_gP)
-nmap <C-n> <plug>(YoinkPostPasteSwapBack)
-nmap <C-p> <plug>(YoinkPostPasteSwapForward)
+nmap <C-N> <plug>(YoinkPostPasteSwapBack)
+nmap <C-P> <plug>(YoinkPostPasteSwapForward)
 
 " setup easymotion
 let g:EasyMotion_do_mapping = 0 " disable defaults
@@ -273,16 +289,6 @@ let g:workspace_session_disable_on_args=1 " when starting with a specific file, 
 let g:workspace_autosave=0 " don't autosave automatically
 let g:workspace_persist_undo_history=0 " use vim default undo history
 
-" ocaml settings (if opam and merlin installed)
-if system('opam --version') &&
-            \ system('opam list --installed --short --safe --color=never --check merlin')
-  let g:opam_share_dir =
-              \ substitute(system('opam var share'),'[\r\n]*$','','''') .
-              \ '/merlin/vim'
-  set rtp+=g:opam_share_dir
-  set rtp^=g:opam_share_dir.'/ocp-indent/vim'
-endif
-
 " slime setup <C-c><C-c> to send over selection
 " find tmux pane with <C-b>q and set with `:.<pane_num>`
 " Note: can reset job id if channel number changes with <C-c>v
@@ -291,38 +297,15 @@ let g:slime_python_ipython = 1
 let g:slime_cell_delimiter = '^\\s*##'
 let g:slime_bracketed_paste = 1
 let g:slime_no_mappings = 1
-nmap <C-c>v <Plug>SlimeConfig
 nmap <C-c><C-c> <Plug>SlimeCellsSendAndGoToNext
 " these won't work on mac
 nmap <C-c><c-Down> <Plug>SlimeCellsNext
 nmap <C-c><c-Up> <Plug>SlimeCellsPrev
 
-" map <g><d> to :ALEGoToDef
-
-" function ALELSPMappings()
-"     let l:lsp_found=0
-"     for l:linter in ale#linter#Get(&filetype)
-"                 \ | if !empty(l:linter.lsp)
-"                 \ | let l:lsp_found=1
-"                 \ | endif
-"                 \ | endfor
-"     if (l:lsp_found)
-"         nnoremap <buffer> gd :ALEGoToDefinition<CR>
-"         nnoremap <buffer> <leader>gd :ALEGoToDefinition -split<CR>
-"         nnoremap <buffer> gD :ALEGoToDefinition -tab<CR>
-"         nnoremap <buffer> gr :ALEFindReferences<CR>
-"         nnoremap <buffer> gR :ALERepeatSelection<CR>
-"     endif
-" endfunction
-" aug ALELSPMap
-"     au!
-"     au BufRead,FileType * call ALELSPMappings()
-" aug END
-
-" Undotree
+" undotree
 nnoremap <F5> :UndotreeToggle<CR>
 
-" vimade
+" configure vimade darkening on lose focus
 let g:vimade = {}
 let g:vimade.fadelevel = 0.5
 let g:vimade.rowbufsize = 0
@@ -330,9 +313,22 @@ let g:vimade.colbufsize = 1
 let g:vimade.enabletreesitter = 1
 let g:vimade.enablefocusfading = 1
 
-" rebind join lines to alt-j and join comments properly
-vnoremap <silent> <buffer> <M-j> gfJ
-nnoremap <silent> <buffer> <M-j> J
+" move selected text with J/K
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" let treesitter handle folding
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+" starlark language autodetection
+aug language_autodetection
+  au!
+  " set filetype if not already set
+  au BufNewFile,BufRead *.bxl setfiletype starlark
+  " files with the pattern TARGETS are starlark files
+  au BufNewFile,BufRead TARGETS setfiletype starlark
+aug END
 
 " lua setup
 lua << EOF
@@ -348,11 +344,11 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     additional_vim_regex_highlighting = false,
   },
-  -- rainbow = {
-  --   enable = true,
-  --   query = 'rainbow-parens',
-  --   strategy = require('ts-rainbow').strategy.global,
-  -- },
+  rainbow = {
+    enable = true,
+    query = 'rainbow-parens',
+    strategy = require('ts-rainbow').strategy.global,
+  },
 }
 vim.g.skip_ts_context_commentstring_module = true
 require'ts_context_commentstring'.setup{}
@@ -367,64 +363,71 @@ require'treesitter-context'.setup{
   separator = '#',
   zindex = 20,
 }
+
 -- tree climber setup
 local keyopts = { noremap = true, silent = true }
 local movement_options = { highlight = true, skip_comments = true, timeout = 250 }
-vim.keymap.set({'n', 'v', 'o'}, 'K', function()
+vim.keymap.set({'n', 'v', 'o'}, '<M-K>', function()
     require('tree-climber').goto_parent(movement_options)
   end, keyopts)
-vim.keymap.set({'n', 'v', 'o'}, 'J', function()
+vim.keymap.set({'n', 'v', 'o'}, '<M-J>', function()
     require('tree-climber').goto_child(movement_options)
   end, keyopts)
-vim.keymap.set({'n', 'v', 'o'}, 'L', function()
+vim.keymap.set({'n', 'v', 'o'}, '<M-L>', function()
     require('tree-climber').goto_next(movement_options)
   end, keyopts)
-vim.keymap.set({'n', 'v', 'o'}, 'H', function()
+vim.keymap.set({'n', 'v', 'o'}, '<M-H>', function()
     require('tree-climber').goto_prev(movement_options)
   end, keyopts)
 vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
-EOF
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
 
-" language autodetection
-aug language_autodetection
-  au!
-  " set filetype if not already set
-  au BufNewFile,BufRead *.bxl setfiletype starlark
-  " files with the pattern TARGETS are starlark files
-  au BufNewFile,BufRead TARGETS setfiletype starlark
-aug END
-
-lua << EOF
+-- lsp setup
 require("mason").setup()
+vim.diagnostic.config({ 
+  virtual_lines = true,
+  severity_sort = true,
+  text = {
+    [vim.diagnostic.severity.ERROR] = "",
+    [vim.diagnostic.severity.WARN] = "",
+    [vim.diagnostic.severity.HINT] = "",
+    [vim.diagnostic.severity.INFO] = "",
+  },
+
+  linehl = {
+    [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+    [vim.diagnostic.severity.WARN] = "None",
+    [vim.diagnostic.severity.HINT] = "None",
+    [vim.diagnostic.severity.INFO] = "None",
+  },
+  numhl = {
+      [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+      [vim.diagnostic.severity.WARN] = "WarningMsg",
+      [vim.diagnostic.severity.HINT] = "DiagnosticHint",
+      [vim.diagnostic.severity.INFO] = "DiagnosticHint",
+  },
+})
+vim.opt["signcolumn"] = "yes"
+
+vim.keymap.set("n", "gq", vim.diagnostic.setqflist)
+
 
 vim.lsp.config['pyrefly'] = {
   cmd = { 'pyrefly', 'lsp' },
   filetypes = { 'python' },
   root_markers = {
-    -- search for these files first
-    -- {
-      'pyproject.toml',
-      'pyrefly.toml',
-    -- },
-    -- -- then fall back to these if none of the above were found
-    -- {
-    --   'setup.py',
-    --   'setup.cfg',
-    --   'requirements.txt',
-    --   'Pipfile',
-    --   '.git',
-    -- }
-      'setup.py',
-      'setup.cfg',
-      'requirements.txt',
-      'Pipfile',
-      '.git',
+    'pyproject.toml',
+    'pyrefly.toml',
   },
 }
 
 vim.lsp.enable("pyrefly")
-EOF
+vim.lsp.enable("rust_analyzer")
 
+require("fidget").setup {
+    -- render_limit = 3,
+}
+-- TODO: learn from organization of https://github.com/rezhaTanuharja/minimalistNVIM/tree/main
+-- TODO: setup error count in statusline
+-- TODO: setup linters and formatters
+EOF
 
