@@ -342,7 +342,7 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = {
     'css', 'html', 'javascript', 'lua', 'python', 'typescript', 'vim', 'vimdoc',
     'ocaml', 'c', 'ocaml_interface', 'bash', 'diff', 'json', 'markdown',
-    'markdown_inline', 'yaml', 'query', 'starlark', 'toml'
+    'markdown_inline', 'yaml', 'query', 'starlark', 'toml', 'rust'
   },
   highlight = {
     enable = true,
@@ -392,7 +392,7 @@ aug language_autodetection
   au!
   " set filetype if not already set
   au BufNewFile,BufRead *.bxl setfiletype starlark
-  " files with the pattern TARGETS are python files
+  " files with the pattern TARGETS are starlark files
   au BufNewFile,BufRead TARGETS setfiletype starlark
 aug END
 
