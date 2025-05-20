@@ -390,10 +390,10 @@ vim.keymap.set({'n', 'v', 'o'}, '<M-H>', function()
 vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
 
 -- lsp setup
-require("mason").setup()
-require("mason-lspconfig").setup{
+require('mason').setup()
+require('mason-lspconfig').setup{
   ensure_installed = {
-    "rust_analyzer",
+    'rust_analyzer',
   }
 }
 
@@ -402,32 +402,58 @@ vim.diagnostic.config({
   severity_sort = true,
   float = false,
   text = {
-    [vim.diagnostic.severity.ERROR] = "",
-    [vim.diagnostic.severity.WARN] = "",
-    [vim.diagnostic.severity.HINT] = "",
-    [vim.diagnostic.severity.INFO] = "",
+    [vim.diagnostic.severity.ERROR] = '',
+    [vim.diagnostic.severity.WARN] = '',
+    [vim.diagnostic.severity.HINT] = '',
+    [vim.diagnostic.severity.INFO] = '',
   },
 
   linehl = {
-    [vim.diagnostic.severity.ERROR] = "ErrorMsg",
-    [vim.diagnostic.severity.WARN] = "None",
-    [vim.diagnostic.severity.HINT] = "None",
-    [vim.diagnostic.severity.INFO] = "None",
+    [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+    [vim.diagnostic.severity.WARN] = 'None',
+    [vim.diagnostic.severity.HINT] = 'None',
+    [vim.diagnostic.severity.INFO] = 'None',
   },
   numhl = {
-      [vim.diagnostic.severity.ERROR] = "ErrorMsg",
-      [vim.diagnostic.severity.WARN] = "WarningMsg",
-      [vim.diagnostic.severity.HINT] = "DiagnosticHint",
-      [vim.diagnostic.severity.INFO] = "DiagnosticHint",
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+      [vim.diagnostic.severity.WARN] = 'WarningMsg',
+      [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
+      [vim.diagnostic.severity.INFO] = 'DiagnosticHint',
   },
 })
-vim.opt["signcolumn"] = "yes"
-vim.keymap.set("n", "gq", vim.diagnostic.setqflist, keyopts)
-vim.keymap.set("n", "<leader>j", function()
+vim.opt['signcolumn'] = 'yes'
+vim.lsp.inlay_hint.enable(true)
+-- `ge` motion opens qflist with all errors
+vim.keymap.set('n', 'ge', vim.diagnostic.setqflist, keyopts)
+-- `<leader>j` goes to next error
+vim.keymap.set('n', '<leader>j', function()
   vim.diagnostic.goto_next({ count = 1, float = false })
 end, keyopts)
-vim.keymap.set("n", "<leader>k", function()
+-- `<leader>k` goes to prev error
+vim.keymap.set('n', '<leader>k', function()
   vim.diagnostic.goto_next({ count = -1, float = false })
+end, keyopts)
+-- open definition in current buffer
+vim.keymap.set('n', 'gd', function()
+  vim.lsp.buf.definition({ reuse_win = false })
+end, keyopts)
+-- open definition in new buffer
+vim.keymap.set('n', 'gD', function()
+  pos = vim.fn.getpos('.')
+  vim.cmd([[tabnew %]])
+  vim.fn.setpos('.', pos)
+  vim.lsp.buf.definition({ reuse_win = false })
+end, keyopts)
+-- open typedef in current buffer
+vim.keymap.set('n', 'gtd', function()
+  vim.lsp.buf.type_definition({ reuse_win = true })
+end, keyopts)
+-- open typedef in new buffer buffer
+vim.keymap.set('n', 'gtD', function()
+  pos = vim.fn.getpos('.')
+  vim.cmd([[tabnew %]])
+  vim.fn.setpos('.', pos)
+  vim.lsp.buf.type_definition({ reuse_win = true })
 end, keyopts)
 
 vim.lsp.config['pyrefly'] = {
@@ -439,22 +465,22 @@ vim.lsp.config['pyrefly'] = {
   },
 }
 
-vim.lsp.enable("pyrefly")
+vim.lsp.enable('pyrefly')
 
-require("fidget").setup {
+require('fidget').setup {
     -- render_limit = 3,
 }
 
 -- setup linting
 require('lint').linters_by_ft = {
-  yaml = { "yamllint" }
+  yaml = { 'yamllint' }
 }
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   callback = function()
 
     -- try_lint without arguments runs the linters defined in `linters_by_ft`
     -- for the current filetype
-    require("lint").try_lint()
+    require('lint').try_lint()
   end,
 })
 
