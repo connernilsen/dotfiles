@@ -423,39 +423,51 @@ vim.diagnostic.config({
 })
 vim.opt['signcolumn'] = 'yes'
 vim.lsp.inlay_hint.enable(true)
--- `ge` motion opens qflist with all errors
-vim.keymap.set('n', 'ge', vim.diagnostic.setqflist, keyopts)
--- `<leader>j` goes to next error
-vim.keymap.set('n', '<leader>j', function()
-  vim.diagnostic.goto_next({ count = 1, float = false })
-end, keyopts)
--- `<leader>k` goes to prev error
-vim.keymap.set('n', '<leader>k', function()
-  vim.diagnostic.goto_next({ count = -1, float = false })
-end, keyopts)
--- open definition in current buffer
-vim.keymap.set('n', 'gd', function()
-  vim.lsp.buf.definition({ reuse_win = false })
-end, keyopts)
--- open definition in new buffer
-vim.keymap.set('n', 'gD', function()
-  pos = vim.fn.getpos('.')
-  vim.cmd([[tabnew %]])
-  vim.fn.setpos('.', pos)
-  vim.lsp.buf.definition({ reuse_win = false })
-end, keyopts)
--- open typedef in current buffer
-vim.keymap.set('n', 'gtd', function()
-  vim.lsp.buf.type_definition({ reuse_win = true })
-end, keyopts)
--- open typedef in new buffer buffer
-vim.keymap.set('n', 'gtD', function()
-  pos = vim.fn.getpos('.')
-  vim.cmd([[tabnew %]])
-  vim.fn.setpos('.', pos)
-  vim.lsp.buf.type_definition({ reuse_win = true })
-end, keyopts)
-
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    -- `ge` motion opens qflist with all errors
+    vim.keymap.set('n', 'ge', vim.diagnostic.setqflist, keyopts)
+    -- `<leader>j` goes to next error
+    vim.keymap.set('n', '<leader>j', function()
+    vim.diagnostic.goto_next({ count = 1, float = false })
+    end, keyopts)
+    -- `<leader>k` goes to prev error
+    vim.keymap.set('n', '<leader>k', function()
+    vim.diagnostic.goto_next({ count = -1, float = false })
+    end, keyopts)
+    -- open definition in current buffer
+    vim.keymap.set('n', 'gd', function()
+    vim.lsp.buf.definition({ reuse_win = false })
+    end, keyopts)
+    -- open definition in new buffer
+    vim.keymap.set('n', 'gD', function()
+    pos = vim.fn.getpos('.')
+    vim.cmd([[tabnew %]])
+    vim.fn.setpos('.', pos)
+    vim.lsp.buf.definition({ reuse_win = false })
+    end, keyopts)
+    -- open typedef in current buffer
+    vim.keymap.set('n', 'gtd', function()
+    vim.lsp.buf.type_definition({ reuse_win = true })
+    end, keyopts)
+    -- open typedef in new buffer buffer
+    vim.keymap.set('n', 'gtD', function()
+    pos = vim.fn.getpos('.')
+    vim.cmd([[tabnew %]])
+    vim.fn.setpos('.', pos)
+    vim.lsp.buf.type_definition({ reuse_win = true })
+    end, keyopts)
+    -- other keybinds
+    -- `<c-X><c-O>` in insert mode will open autocomplete
+    -- `K` opens hover
+    -- `grn` renames current symbol
+    -- `gra` opens code action (VSCode CMD + .)
+    -- `grr` finds references
+    -- `gri` finds implementations
+    -- `gO` opens document symbols
+    -- `<c-S>` in insert mode is signature help
+  end,
+})
 vim.lsp.config['pyrefly'] = {
   cmd = { 'pyrefly', 'lsp' },
   filetypes = { 'python' },
