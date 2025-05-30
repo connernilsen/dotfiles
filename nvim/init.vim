@@ -148,8 +148,7 @@ Plug 'navarasu/onedark.nvim'
 " plugin for handling meta-info at bottom of nvim
 Plug 'itchyny/lightline.vim'
 " automatically reopen files like vscode workspace when started.
-" <leader>s will start a new workspace or disable workspace functionality if
-" already on
+" :ToggleWorkspace will start/stop tracking a workspace
 Plug 'thaerkh/vim-workspace'
 " `gcc` to (un)comment current line or `<motion|visual>gc` to comment selection
 Plug 'tpope/vim-commentary'
@@ -329,13 +328,14 @@ vnoremap K :m '<-2<CR>gv=gv
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 
-" starlark language autodetection
+" custom language autodetection
 aug language_autodetection
   au!
-  " set filetype if not already set
+  " .bxl and BUCK are starlark files
   au BufNewFile,BufRead *.bxl setfiletype starlark
-  " files with the pattern TARGETS are starlark files
-  au BufNewFile,BufRead TARGETS setfiletype starlark
+  au BufNewFile,BufRead BUCK setfiletype starlark
+  " .mdx is a markdown with react file
+  au BufNewFile,BufRead *.mdx setfiletype markdown
 aug END
 
 " lua setup
@@ -478,6 +478,7 @@ vim.lsp.config['pyrefly'] = {
 }
 
 vim.lsp.enable('pyrefly')
+vim.lsp.enable('rust-analyzer')
 
 require('fidget').setup {
     -- render_limit = 3,
