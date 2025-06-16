@@ -157,7 +157,7 @@ Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 " show indentation guides, every indent level will have a highlight
 Plug 'preservim/vim-indent-guides'
 " language syntax highlighting
-" Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 " smooth scrolling
 Plug 'psliwka/vim-smoothie'
 " automatically align text in selection (e.g. if you want a bunch of comments
@@ -468,17 +468,31 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- `<c-S>` in insert mode is signature help
   end,
 })
-vim.lsp.config['pyrefly'] = {
-  cmd = { 'pyrefly', 'lsp' },
-  filetypes = { 'python' },
-  root_markers = {
-    'pyproject.toml',
-    'pyrefly.toml',
+
+vim.lsp.config('pyrefly', {
+  cmd = { 'buck2', 'run', '@fbcode//mode/opt', 'fbcode//pyrefly:pyrefly', '--', 'lsp' },
+  trace = 'verbose',
+})
+
+vim.lsp.config('rust_analyzer', {
+  settings = {
+    ['rust-analyzer'] = {
+      check = {
+        command = 'clippy',
+      },
+    },
   },
-}
+})
 
 vim.lsp.enable('pyrefly')
 vim.lsp.enable('rust-analyzer')
+
+function lsp_verbose()
+  vim.lsp.set_log_level('trace')
+  require('vim.lsp.log').set_format_func(vim.inspect)
+end
+
+vim.cmd([[:command! LspVerbose :lua lsp_verbose()]])
 
 require('fidget').setup {
     -- render_limit = 3,
