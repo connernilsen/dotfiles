@@ -84,7 +84,7 @@ if !isdirectory(sdir)
   call mkdir(sdir, '', 0700)
 endif
 let g:workspace_session_directory=sdir " create a new workspace with :ToggleWorkspace
-set completeopt=menu,preview,noinsert " when completing with Ctrl + N in insert mode, don't insert values
+set completeopt=menuone,preview,fuzzy,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax on " enable syntax highlighting
 set splitbelow " split new windows on bottom
@@ -325,8 +325,8 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " let treesitter handle folding
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
 
 " custom language autodetection
 aug language_autodetection
