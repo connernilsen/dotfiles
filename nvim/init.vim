@@ -493,6 +493,7 @@ function lsp_verbose()
 end
 
 vim.cmd([[:command! LspVerbose :lua lsp_verbose()]])
+vim.cmd([[:command! LspRestart :lua lua vim.lsp.stop_client(vim.lsp.get_clients())]])
 
 require('fidget').setup {
     -- render_limit = 3,
