@@ -228,7 +228,7 @@ Plug 'nvim-treesitter/nvim-treesitter-context'
 " functionality for navigating around the syntax tree
 Plug 'drybalka/tree-climber.nvim'
 " rainbowify parentheses
-Plug 'HiPhish/nvim-ts-rainbow2'
+Plug 'HiPhish/rainbow-delimiters.nvim'
 " navigate between tmux and vim seamlessly (with HJKL)
 Plug 'christoomey/vim-tmux-navigator'
 " quickfix window functionality.
@@ -351,11 +351,6 @@ require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
-  },
-  rainbow = {
-    enable = true,
-    query = 'rainbow-parens',
-    strategy = require('ts-rainbow').strategy.global,
   },
 }
 vim.g.skip_ts_context_commentstring_module = true
