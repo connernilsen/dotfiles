@@ -84,7 +84,7 @@ if !isdirectory(sdir)
   call mkdir(sdir, '', 0700)
 endif
 let g:workspace_session_directory=sdir " create a new workspace with :ToggleWorkspace
-set completeopt=menuone,preview,fuzzy,noinsert " when completing with Ctrl + N in insert mode, don't insert values
+set completeopt=menuone,popup,fuzzy,noinsert " when completing with Ctrl + N in insert mode, don't insert values
 set nojs " don't use two spaces after joining a line ending with .
 syntax on " enable syntax highlighting
 set splitbelow " split new windows on bottom
@@ -474,13 +474,19 @@ vim.lsp.config('rust_analyzer', {
     ['rust-analyzer'] = {
       check = {
         command = 'clippy',
+        allTargets = true,
+      },
+      diagnostics = {
+        disabled = {
+          "unlinked-file"
+        },
       },
     },
   },
 })
 
 vim.lsp.enable('pyrefly')
-vim.lsp.enable('rust-analyzer')
+vim.lsp.enable('rust_analyzer')
 
 function lsp_verbose()
   vim.lsp.set_log_level('trace')
@@ -511,4 +517,3 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 -- TODO: setup error count in statusline
 -- TODO: figure out how to wire formatters in
 EOF
-
