@@ -127,8 +127,8 @@ if empty(glob(stdpath('data') . '/site/autoload/plug.vim'))
   " convert back to one line if this fails
   execute
         \ '!curl -fLo '
-        \ .data_dir
-        \ .'/autoload/plug.vim --create-dirs
+        \ .stdpath('data')
+        \ .'/site/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -325,8 +325,8 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " let treesitter handle folding
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 " custom language autodetection
 aug language_autodetection
@@ -357,7 +357,7 @@ vim.g.skip_ts_context_commentstring_module = true
 require'ts_context_commentstring'.setup{}
 require'treesitter-context'.setup{
   enable = true,
-  max_lines = 0,
+  max_lines = 15,
   min_window_height = 0,
   line_numbers = true,
   multiline_threshold = 20,
@@ -386,11 +386,7 @@ vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
 
 -- lsp setup
 require('mason').setup()
-require('mason-lspconfig').setup{
-  ensure_installed = {
-    'rust_analyzer',
-  }
-}
+require('mason-lspconfig').setup()
 
 vim.diagnostic.config({
   virtual_lines = true,
@@ -424,11 +420,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'ge', vim.diagnostic.setqflist, keyopts)
     -- `<leader>j` goes to next error
     vim.keymap.set('n', '<leader>j', function()
-    vim.diagnostic.goto_next({ count = 1, float = false })
+    vim.diagnostic.jump({ count = 1, float = false })
     end, keyopts)
     -- `<leader>k` goes to prev error
     vim.keymap.set('n', '<leader>k', function()
-    vim.diagnostic.goto_next({ count = -1, float = false })
+    vim.diagnostic.jump({ count = -1, float = false })
     end, keyopts)
     -- open definition in current buffer
     vim.keymap.set('n', 'gd', function()
@@ -461,13 +457,31 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- `gri` finds implementations
     -- `gO` opens document symbols
     -- `<c-S>` in insert mode is signature help
+    -- `<c-w>d` shows diagnostics in popup
   end,
 })
 
-vim.lsp.config('pyrefly', {
-  cmd = { 'buck2', 'run', '@fbcode//mode/opt', 'fbcode//pyrefly:pyrefly', '--', 'lsp' },
-  trace = 'verbose',
-})
+local pyrefly_binary = os.getenv('PYREFLY_BINARY')
+if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
+  vim.lsp.config('pyrefly', {
+    cmd = { pyrefly_binary, 'lsp' },
+    trace = 'verbose',
+    settings = {
+      pyrefly = {
+        trace = {
+          server = 'verbose'
+        }
+      }
+    },
+    capabilities = {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = true
+        }
+      }
+    }
+  })
+end
 
 vim.lsp.config('rust_analyzer', {
   settings = {
@@ -478,11 +492,19 @@ vim.lsp.config('rust_analyzer', {
       },
       diagnostics = {
         disabled = {
-          "unlinked-file"
+          'unlinked-file',
+          'clippy::type_complexity',
         },
       },
     },
   },
+  capabilities = {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true
+      }
+    }
+  }
 })
 
 vim.lsp.enable('pyrefly')
@@ -494,7 +516,6 @@ function lsp_verbose()
 end
 
 vim.cmd([[:command! LspVerbose :lua lsp_verbose()]])
-vim.cmd([[:command! LspRestart :lua lua vim.lsp.stop_client(vim.lsp.get_clients())]])
 
 require('fidget').setup {
     -- render_limit = 3,
