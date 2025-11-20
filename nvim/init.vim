@@ -483,29 +483,55 @@ if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
   })
 end
 
-vim.lsp.config('rust_analyzer', {
-  settings = {
-    ['rust-analyzer'] = {
-      check = {
-        command = 'clippy',
-        allTargets = true,
-      },
-      diagnostics = {
-        disabled = {
-          'unlinked-file',
-          'clippy::type_complexity',
+local is_meta_internal = os.getenv("FBC") ~= nil
+if is_meta_internal then
+  vim.lsp.config('rust_analyzer', {
+    settings = {
+      ["rust-analyzer"] = {
+        workspace = {
+          discoverConfig = {
+            command = { "arc", "rust-project", "develop-json", "{arg}" },
+            progressLabel = "rust-analyzer",
+            filesToWatch = { "BUCK", "TARGETS" },
+          },
+        },
+        rustfmt = {
+          overrideCommand = { "arc", "rustfmt" },
+        },
+        check = {
+          overrideCommand = { "arc", "rust-project", "check", "$saved_file" },
+        },
+        runnables = {
+          command = "buck2",
         },
       },
     },
-  },
-  capabilities = {
-    workspace = {
-      didChangeWatchedFiles = {
-        dynamicRegistration = true
+  })
+else
+  vim.lsp.config('rust_analyzer', {
+    settings = {
+      ['rust-analyzer'] = {
+        check = {
+          command = 'clippy',
+          allTargets = true,
+        },
+        diagnostics = {
+          disabled = {
+            'unlinked-file',
+            'clippy::type_complexity',
+          },
+        },
+      },
+    },
+    capabilities = {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = true
+        }
       }
     }
-  }
-})
+  })
+end
 
 vim.lsp.enable('pyrefly')
 vim.lsp.enable('rust_analyzer')
