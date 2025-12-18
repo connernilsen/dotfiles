@@ -4,3 +4,4 @@ bundle
 .netrwhist
 session-dir
 vim/autoload/plug.vim
+.DS_Store
