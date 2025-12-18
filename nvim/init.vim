@@ -473,17 +473,19 @@ if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
         }
       }
     },
-    capabilities = {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true
-        }
-      }
-    }
   })
 end
+vim.lsp.config('pyrefly', {
+  capabilities = {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true
+      }
+    }
+  }
+})
 
-local is_meta_internal = os.getenv("FBC") ~= nil
+local is_meta_internal = os.getenv('META_INTERNAL') ~= nil
 if is_meta_internal then
   vim.lsp.config('rust_analyzer', {
     settings = {
@@ -523,15 +525,17 @@ else
         },
       },
     },
-    capabilities = {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true
-        }
-      }
-    }
   })
 end
+vim.lsp.config('rust_analyzer', {
+  capabilities = {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true
+      }
+    }
+  }
+})
 
 vim.lsp.enable('pyrefly')
 vim.lsp.enable('rust_analyzer')
