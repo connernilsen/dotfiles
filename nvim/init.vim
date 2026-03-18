@@ -220,11 +220,11 @@ Plug 'mbbill/undotree'
 " jump to any character anywhere with <leader>s
 Plug 'easymotion/vim-easymotion'
 " plugin for syntax everything (:TSInstall <lang> to setup)
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'commit': '42fc28ba918343ebfd5565147a42a26580579482'}
 " visualizer for your language's AST
-Plug 'nvim-treesitter/playground'
+" Plug 'nvim-treesitter/playground'
 " show current context within module/function/... at top of buffer
-Plug 'nvim-treesitter/nvim-treesitter-context'
+Plug 'nvim-treesitter/nvim-treesitter-context', {'commit': 'ec308c7827b5f8cb2dd0ad303a059c945dd21969'}
 " functionality for navigating around the syntax tree
 Plug 'drybalka/tree-climber.nvim'
 " rainbowify parentheses
@@ -357,7 +357,7 @@ vim.g.skip_ts_context_commentstring_module = true
 require'ts_context_commentstring'.setup{}
 require'treesitter-context'.setup{
   enable = true,
-  max_lines = 15,
+  max_lines = 7,
   min_window_height = 0,
   line_numbers = true,
   multiline_threshold = 20,
@@ -477,13 +477,13 @@ if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
   }
 else
   pyrefly_config = {
-    capabilities = {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true
-        }
-      }
-    }
+--     capabilities = {
+--       workspace = {
+--         didChangeWatchedFiles = {
+--           dynamicRegistration = true
+--         }
+--       }
+--     }
   }
 end
 vim.lsp.config('pyrefly', pyrefly_config)
