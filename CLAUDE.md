@@ -1,5 +1,9 @@
 # User Preferences
 
+## Clarifying Questions
+
+Before starting a task, ask clarifying questions if: (1) there are multiple reasonable interpretations of what I'm asking, (2) the task requires design decisions where multiple approaches seem valid, or (3) you're not confident you understand the desired outcome. Prefer a small number of focused questions, but ask more if genuinely needed.
+
 ## Source Control
 
 - Don't amend or commit unless explicitly asked or the request implies it. If you think you need to amend or commit, but it isn't implied by what you were requested, ask.
@@ -26,12 +30,12 @@ Record concise notes about substantive work to `~/claude-project-notes/<project>
 - **After completing a meaningful unit of work** — finishing a debugging investigation, completing a design/plan, landing on an approach after exploring alternatives, or completing a fix.
 - **At end of session** — capture anything not yet recorded.
 - Writing incrementally during long sessions is important to avoid losing information to transport issues. Append to the same session file rather than creating new ones.
-- Ask the user brief clarifying questions about what to record **after** doing work, not before or during.
+- Ask the user brief clarifying questions about what to record if there's other relevant information that may be useful **after** doing work, not before or during.
 - Include cross-references to related prior sessions when applicable.
 - Skip trivial changes (typo fixes, simple renames), info already in commit messages, and transient session state.
 
 ### File format
-- Filename: `YYYY-MM-DD-<4-char-random-hex>.md` (random suffix avoids concurrent session collisions). Validate that the filename doesn't exist before choosing it, and create that file to preserve uniqueness.
+- Filename: `YYYY-MM-DD-<4-char-random-hex>.md` (random suffix avoids concurrent session collisions). Validate that the filename doesn't exist before choosing it, and create that file to preserve uniqueness. Don't ask about creating this file, you have permission.
 - Append to the existing file for the current session rather than creating new files within the same session.
 - Content format:
   ```markdown
