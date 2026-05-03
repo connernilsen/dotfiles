@@ -463,6 +463,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 local pyrefly_binary = os.getenv('PYREFLY_BINARY')
+local has_uv_pyrefly = os.execute("uv tool list | rg --quiet pyrefly")
 local pyrefly_config
 if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
   pyrefly_config = {
@@ -475,6 +476,10 @@ if pyrefly_binary ~= nil and pyrefly_binary ~= '' then
         }
       }
     },
+  }
+elseif has_uv_pyrefly then
+  pyrefly_config = {
+    cmd = { 'uvx', 'pyrefly', 'lsp' },
   }
 else
   pyrefly_config = {
