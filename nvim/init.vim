@@ -122,7 +122,8 @@ if $OVERRIDE_PYBINARY != ''
 endif
 
 " download and install vim-plug
-if empty(glob(stdpath('data') . '/site/autoload/plug.vim'))
+let data_dir = stdpath('data').'/site'
+if empty(glob(data_dir.'/autoload/plug.vim'))
   echo "*********Installing vim-plug*********"
   " convert back to one line if this fails
   execute
