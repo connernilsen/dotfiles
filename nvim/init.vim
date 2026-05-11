@@ -535,13 +535,13 @@ else
         },
       },
     },
-    capabilities = {
-        workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true
-        }
-      }
-    }
+    -- capabilities = {
+    --     workspace = {
+    --     didChangeWatchedFiles = {
+    --       dynamicRegistration = true
+    --     }
+    --   }
+    -- }
   }
 end
 vim.lsp.config('rust_analyzer', rust_config)
