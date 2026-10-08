@@ -225,7 +225,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'main'}
 " visualizer for your language's AST
 " Plug 'nvim-treesitter/playground'
 " show current context within module/function/... at top of buffer
-Plug 'nvim-treesitter/nvim-treesitter-context', {'branch': 'main'}
+Plug 'nvim-treesitter/nvim-treesitter-context'
 " functionality for navigating around the syntax tree
 Plug 'drybalka/tree-climber.nvim'
 " rainbowify parentheses
