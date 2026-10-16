@@ -42,6 +42,7 @@ Before implementing, check whether the behavior or test already exists and wheth
 
 - Don't amend or commit unless explicitly asked or the request implies it. If you think you need to amend or commit, but it isn't implied by what you were requested, ask. Requests to rebase, review, or address comments don't imply permission to amend.
 - In a stack, confirm which commit you're on and which commit the change belongs to before editing.
+- If you are making commits, prefer many smaller working changes rather than one large diff for easier review.
 - Unless explicitly requested, don't clear the current working state without asking.
 
 ## Critical Thinking and Uncertainty
