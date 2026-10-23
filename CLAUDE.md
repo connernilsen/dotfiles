@@ -31,6 +31,11 @@ Skip self-review for trivial changes (one-line fixes, comment- or doc-only edits
   - **High**: correctness bugs, crashes, regressions, security issues, or violations of explicit requirements.
   - **Medium**: edge-case bugs, missing tests for new behavior, or maintainability problems a reviewer would block on.
   - **Low**: style, naming, nits, minor simplifications.
+- Make each code-review issue understandable without remembering earlier context:
+  - Start with a one-sentence reminder of the prior decision or requirement it breaks, if there is one.
+  - Say why it's a problem in terms of the consequence: a wrong type, a missed or false error, a crash, or a slowdown.
+  - Compare three behaviors: the base revision (without the change or stack), the current change, and what should happen. In a stack, say which commit introduces the behavior and whether the top of the stack differs. Classify the issue as a regression, a new gap, or pre-existing, and say whether you ran it or only read the code.
+  - In code examples, mark the offending line with a comment giving the current and the expected behavior.
 
 ## Clarifying Questions
 
