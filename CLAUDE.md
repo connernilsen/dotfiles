@@ -7,7 +7,9 @@
 - Self-review every non-trivial implementation (see Self-Review).
 - **Prove checks can fail.** Before trusting a new test or repro, show it fails without the change. Before trusting a clean result, confirm the check ran: test count above zero, target resolved, relevant diagnostic severities visible, exit code from the right process (not the last stage of a pipe).
 - Build after any rebase or merge before reviewing or editing. A clean merge can still fail to compile.
-- After changing behavior, re-read nearby comments, docs, and the commit summary for claims that are no longer true.
+- After changing behavior, re-read nearby comments and the commit summary for claims that are no longer true.
+- Keep code comments high level, and leave alone any comment that is still true. When one must change, generalize it rather than enumerating the new cases, so later changes don't need to touch it again. For example, change `/// A class-body attribute may be uninitialized...` to `/// An attribute may be uninitialized...`, not `/// A class or instance attribute may be uninitialized...`.
+- Put user-facing documentation updates (e.g. website docs) in their own diff once a major unit of work is finished. Don't update the docs incrementally in each diff of a stack: reviewers shouldn't have to follow small doc changes from diff to diff. If the docs need updating, say so and add the docs diff at the end.
 - Before reporting a regression, rule out flakiness: re-run serially or in isolation, and for perf, compare against a noise floor.
 
 ## Self-Review
